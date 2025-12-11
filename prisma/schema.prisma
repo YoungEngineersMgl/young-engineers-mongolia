@@ -1,0 +1,121 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Category {
+  SOFTWARE
+  NANO
+  CHEMICAL
+  MECHANICAL
+  ENVIRONMENTAL
+  ELECTRICAL
+  AEROSPACE
+  CIVIL
+  BIOMEDICAL
+}
+
+
+enum Role {
+  RESEARCH 
+  MARKETING
+  FOUNDER
+}
+model Blog {
+  id          String   @id @default(nanoid())
+  title       String
+  intro       String
+  images      String[]  
+  closingNote String
+  content     Content[]
+  researchId String
+  researchAdmin Admin  @relation(fields: [researchId], references: [id])
+  adminId String?
+  admin   Admin @relation(fields: [adminId], references: [id])
+  category    Category
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Content {
+  id       String   @id @default(nanoid())
+  subTitle String 
+  content   String
+  imgUrl String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  blogs Blog[]
+}
+
+model Project {
+  id        String   @id @default(nanoid())
+  title     String
+  content   String
+  imgUrl    String
+  marketingId String 
+  marketingAdmin Admin  @relation(fields: [marketingId], references: [id])
+  adminId String?
+  admin   Admin @relation(fields: [adminId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+ 
+model Admin {
+  id       String   @id @default(nanoid())
+  role     Role
+  email    String   @unique
+  password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  projects Project[]
+
+  events Event[]
+
+  workshops Workshop[]
+
+  blogs Blog[]
+}
+model Event {
+  id          String   @id @default(nanoid())
+  title       String
+  content     String
+  imgUrl      String?
+  eventDate   DateTime 
+  eventTime   String  
+  registerUrl String?
+  marketingId String 
+  marketingAdmin Admin  @relation(fields: [marketingId], references: [id])
+  adminId String?
+  admin   Admin @relation(fields: [adminId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Workshop {
+  id          String   @id @default(nanoid())
+  title       String
+  content     String
+  imgUrl      String?
+  eventDate   DateTime 
+  eventTime   String 
+  registerUrl String?
+  marketingId String 
+  adminId String?
+  admin   Admin @relation(fields: [adminId], references: [id])
+  marketingAdmin Admin  @relation(fields: [marketingId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

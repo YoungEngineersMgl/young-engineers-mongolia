@@ -35,14 +35,14 @@ enum Role {
 model Blog {
   id          String   @id @default(nanoid())
   title       String
-  intro       String
-  images      String[]  
+  intro       String 
+  imgUrl      String 
   closingNote String
   content     Content[]
   researchId String
-  researchAdmin Admin  @relation(fields: [researchId], references: [id])
+  researchAdmin Admin  @relation("researchAdmin", fields: [researchId], references: [id])
   adminId String?
-  admin   Admin @relation(fields: [adminId], references: [id])
+  admin   Admin? @relation("admin", fields: [adminId], references: [id])
   category    Category
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -50,13 +50,13 @@ model Blog {
 
 model Content {
   id       String   @id @default(nanoid())
+  blogId String
+  blog Blog @relation(fields:[blogId], references:[id])
   subTitle String 
   content   String
   imgUrl String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  blogs Blog[]
 }
 
 model Project {
@@ -65,9 +65,9 @@ model Project {
   content   String
   imgUrl    String
   marketingId String 
-  marketingAdmin Admin  @relation(fields: [marketingId], references: [id])
+  marketingAdmin Admin  @relation("marketingAdmin", fields: [marketingId], references: [id])
   adminId String?
-  admin   Admin @relation(fields: [adminId], references: [id])
+  admin   Admin? @relation("admin", fields: [adminId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -80,13 +80,17 @@ model Admin {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  projects Project[]
+  workshopsMarketing Workshop[] @relation("marketingAdmin")
+  workshopsAdmin Workshop[] @relation("admin")
 
-  events Event[]
+  blogResearch Blog[] @relation("researchAdmin")
+  blogAdmin Blog[] @relation("admin")
 
-  workshops Workshop[]
+  projectMarketing Project[] @relation("marketingAdmin")
+  projectAdmin Project[] @relation("admin")
 
-  blogs Blog[]
+  eventMarketing Event[] @relation("marketingAdmin")
+  eventAdmin Event[] @relation("admin")
 }
 model Event {
   id          String   @id @default(nanoid())
@@ -97,9 +101,9 @@ model Event {
   eventTime   String  
   registerUrl String?
   marketingId String 
-  marketingAdmin Admin  @relation(fields: [marketingId], references: [id])
+  marketingAdmin Admin  @relation("marketingAdmin", fields: [marketingId], references: [id])
   adminId String?
-  admin   Admin @relation(fields: [adminId], references: [id])
+  admin   Admin? @relation("admin", fields: [adminId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
@@ -114,8 +118,8 @@ model Workshop {
   registerUrl String?
   marketingId String 
   adminId String?
-  admin   Admin @relation(fields: [adminId], references: [id])
-  marketingAdmin Admin  @relation(fields: [marketingId], references: [id])
+  admin   Admin? @relation("admin", fields: [adminId], references: [id])
+  marketingAdmin Admin  @relation("marketingAdmin", fields: [marketingId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

@@ -36,7 +36,7 @@ export async function POST(req: Request) {
           status: admin.status,
         },
         process.env.JWT_SECRET!,
-        { expiresIn: "6h" }
+        { expiresIn: "9h" }
       );
 
       return NextResponse.json(token, {

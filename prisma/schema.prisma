@@ -134,7 +134,7 @@ model Workshop {
   id          String   @id @default(nanoid())
   title       String
   content     String
-  imgUrl      String?
+  imgUrl      String
   eventDate   DateTime 
   eventTime   String 
   registerUrl String?

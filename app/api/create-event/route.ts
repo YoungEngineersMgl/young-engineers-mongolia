@@ -21,7 +21,15 @@ export async function POST(req: Request) {
       process.env.JWT_SECRET!
     ) as JwtAdminPayload;
 
-    const { title, content, imgUrl, eventDate, eventTime, registerUrl } = body;
+    const {
+      title,
+      content,
+      imgUrl,
+      eventDate,
+      eventTime,
+      registerUrl,
+      location,
+    } = body;
 
     const findAdmin = await prisma.admin.findUnique({
       where: { id: decoded.id },
@@ -35,7 +43,14 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Error" });
     }
 
-    if (!title || !content || !imgUrl || !eventDate || !eventTime) {
+    if (
+      !title ||
+      !content ||
+      !imgUrl ||
+      !eventDate ||
+      !eventTime ||
+      !location
+    ) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -52,6 +67,7 @@ export async function POST(req: Request) {
             eventDate,
             eventTime,
             registerUrl,
+            location,
             engineeringId: decoded.id,
           },
         });
@@ -67,6 +83,7 @@ export async function POST(req: Request) {
             eventDate,
             eventTime,
             registerUrl,
+            location,
             marketingId: decoded.id,
           },
         });
@@ -82,6 +99,7 @@ export async function POST(req: Request) {
             eventDate,
             eventTime,
             registerUrl,
+            location,
             adminId: decoded.id,
           },
         });

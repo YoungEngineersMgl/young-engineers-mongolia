@@ -119,6 +119,7 @@ model Event {
   imgUrl      String
   eventDate   DateTime 
   eventTime   String  
+  location String
   registerUrl String?
   engineeringId String?
   engineeringAdmin Admin? @relation("engineeringAdmin", fields:[engineeringId], references:[id])
@@ -137,6 +138,7 @@ model Workshop {
   imgUrl      String
   eventDate   DateTime 
   eventTime   String 
+  location String
   registerUrl String?
   marketingId String?
   engineeringId String?

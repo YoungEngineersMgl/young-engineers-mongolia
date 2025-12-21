@@ -23,23 +23,26 @@ export async function POST(
   try {
     const { token } = await context.params;
     const { email, newPassword, confirmPassword } = body;
-    
+
     const findAdmin = await prisma.admin.findUnique({
       where: { email },
     });
-    if (!findAdmin?.inviteExpiresAt || !findAdmin.inviteExpiresAt) {
-      return NextResponse.json({ error: "Error" }, { status: 403 });
+
+    if (!email || !newPassword || !confirmPassword) {
+      return NextResponse.json({ error: "Missing field" }, { status: 403 });
+    }
+    if (!findAdmin || !findAdmin.inviteToken || !findAdmin.inviteExpiresAt) {
+      return NextResponse.json(
+        { error: "You are not invited" },
+        { status: 404 }
+      );
     }
 
-    if (!findAdmin.inviteExpiresAt || findAdmin.inviteExpiresAt < new Date()) {
+    if (findAdmin.inviteExpiresAt < new Date()) {
       return NextResponse.json(
         { error: "Invite token expired" },
         { status: 403 }
       );
-    }
-
-    if (!findAdmin?.inviteToken) {
-      return NextResponse.json({ error: "Error" });
     }
 
     const isValid = await bcrypt.compare(token, findAdmin.inviteToken);

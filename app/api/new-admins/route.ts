@@ -47,6 +47,26 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
+    if (!email || !role) {
+      return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+    }
+
+    const isExists = await prisma.admin.findUnique({
+      where: { email },
+    });
+
+    if (isExists) {
+      return NextResponse.json(
+        { error: "Email already exists" },
+        { status: 400 }
+      );
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+    }
+
     const createNewAdmin = await prisma.admin.create({
       data: {
         email,

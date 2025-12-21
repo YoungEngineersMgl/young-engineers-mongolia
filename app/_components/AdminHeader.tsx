@@ -118,7 +118,12 @@ export default function AdminHeader() {
             path="/create-admin"
           />
 
-          <NavItem icon={LogOut} label="Log Out" path="/event/create" />
+          <NavItem
+            icon={LogOut}
+            label="Log Out"
+            path="/login"
+            onClick={logOut}
+          />
         </div>
       )}
     </header>

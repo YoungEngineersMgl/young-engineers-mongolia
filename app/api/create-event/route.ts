@@ -92,3 +92,32 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: err }, { status: 500 });
   }
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return NextResponse.json({ error: "Missing token" }, { status: 401 });
+    }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET!
+    ) as JwtAdminPayload;
+
+    const body = await req.json();
+    const { id } = body;
+
+    if (decoded.role !== "RESEARCH") {
+      const deleteEvent = await prisma.event.delete({
+        where: { id },
+      });
+      return NextResponse.json(
+        { message: "successfully deleted" },
+        { status: 200 }
+      );
+    }
+  } catch (err) {
+    return NextResponse.json({ error: err }, { status: 500 });
+  }
+}

@@ -3,7 +3,7 @@ import { Resend } from "resend";
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendInviteEmail(email: string, token: string) {
-  const inviteLink = `${process.env.APP_URL}/admin/activate?token=${token}`;
+  const inviteLink = `${process.env.APP_URL}/activate/${token}`;
 
   await resend.emails.send({
     from: "onboarding@resend.dev",

@@ -87,7 +87,9 @@ const Page = () => {
 
           <CardContent className="space-y-5">
             <div className="space-y-1">
-              <label className="text-sm font-medium">Admin Email</label>
+              <label className="text-lg font-medium">
+                Admin Email <span className="text-red-500">*</span>
+              </label>
               <Input
                 type="email"
                 placeholder="admin@example.com"
@@ -98,7 +100,9 @@ const Page = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="text-sm font-medium">Admin Role</label>
+              <label className="text-lg font-medium">
+                Admin Role <span className="text-red-500">*</span>
+              </label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button

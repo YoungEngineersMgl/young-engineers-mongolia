@@ -91,7 +91,9 @@ const Page = () => {
             </p>
           </div>
         </div>
-
+        <div className="text-lg font-medium text-gray-700">
+          Project Title <span className="text-red-500">*</span>
+        </div>
         <Input
           placeholder="Enter project title"
           value={inputValues.title}
@@ -99,19 +101,22 @@ const Page = () => {
           onChange={handleInputs}
           className="mb-4 bg-white"
         />
+        <div className="text-lg font-medium text-gray-700">
+          Project Content <span className="text-red-500">*</span>
+        </div>
         <textarea
           placeholder="Describe the project"
           name="content"
           value={inputValues.content}
           onChange={handleInputs}
           rows={5}
-          className="w-full rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white"
+          className="w-full rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white mt-2"
         />
 
         <Card className="w-auto shadow-md border border-gray-200 mt-10">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-gray-700">
-              Image
+              Image <span className="text-red-500">*</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">

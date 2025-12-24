@@ -60,7 +60,7 @@ const Page = () => {
 
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-6 flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
-          <ShieldAlert className="h-5 w-5 mt-0.5" />
+          <ShieldAlert className="h-7 w-7" />
           <div>
             <p className="font-medium">Admin Permission Notice</p>
             <p>
@@ -87,7 +87,9 @@ const Page = () => {
 
           <CardContent className="space-y-5">
             <div className="space-y-1">
-              <label className="text-sm font-medium">Admin Email</label>
+              <label className="text-lg font-medium">
+                Admin Email <span className="text-red-500">*</span>
+              </label>
               <Input
                 type="email"
                 placeholder="admin@example.com"
@@ -98,7 +100,9 @@ const Page = () => {
             </div>
 
             <div className="space-y-1">
-              <label className="text-sm font-medium">Admin Role</label>
+              <label className="text-lg font-medium">
+                Admin Role <span className="text-red-500">*</span>
+              </label>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button

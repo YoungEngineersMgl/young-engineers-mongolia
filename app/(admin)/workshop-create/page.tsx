@@ -99,7 +99,7 @@ const Page = () => {
       <AdminHeader />
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-6 flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
-          <ShieldAlert className="h-5 w-5 mt-0.5" />
+          <ShieldAlert className="h-7 w-7" />
           <div>
             <p className="font-medium">Admin Permission Notice</p>
 
@@ -126,8 +126,8 @@ const Page = () => {
           </div>
         </div>
         <div className="space-y-1.5 mt-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Workshop Title
+          <label className="text-lg font-medium text-gray-700">
+            Workshop Title <span className="text-red-500">*</span>
           </label>
           <Input
             placeholder="Enter workshop title"
@@ -145,8 +145,8 @@ const Page = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Description
+          <label className="text-lg font-medium text-gray-700">
+            Description <span className="text-red-500">*</span>
           </label>
           <Input
             placeholder="Short description of the workshop"
@@ -163,12 +163,12 @@ const Page = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Workshop Date
+          <label className="text-lg font-medium text-gray-700">
+            Workshop Date <span className="text-red-500">*</span>
           </label>
           <Input
             type="date"
-           name="workshopDate"
+            name="workshopDate"
             value={inputValues.workshopDate}
             onChange={handleInputs}
             className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
@@ -176,8 +176,8 @@ const Page = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Workshop Time
+          <label className="text-lg font-medium text-gray-700">
+            Workshop Time <span className="text-red-500">*</span>
           </label>
           <Input
             type="time"
@@ -189,7 +189,9 @@ const Page = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">Location</label>
+          <label className="text-lg font-medium text-gray-700">
+            Location <span className="text-red-500">*</span>
+          </label>
           <Input
             placeholder="e.g. Ulaanbaatar, American Corner"
             name="location"
@@ -200,8 +202,8 @@ const Page = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Registration URL
+          <label className="text-lg font-medium text-gray-700">
+            Registration URL <span className="text-gray-500">(Optional)</span>
           </label>
           <Input
             placeholder="https://..."
@@ -215,7 +217,7 @@ const Page = () => {
         <Card className="w-auto shadow-md border border-gray-200 mt-10">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-gray-700">
-              Image
+              Image <span className="text-red-500">*</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
@@ -223,7 +225,7 @@ const Page = () => {
               <div className="relative w-full max-w-xl">
                 <img
                   src={imageUrl}
-                  className="h-full w-full rounded-xl object-cover border"
+                  className="h-64 w-full rounded-xl object-cover border"
                 />
                 <button
                   onClick={removeImg}
@@ -265,6 +267,7 @@ const Page = () => {
             </Button>
           </CardContent>
         </Card>
+
         <Button
           onClick={createWorkshop}
           disabled={

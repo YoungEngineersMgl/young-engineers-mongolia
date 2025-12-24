@@ -95,7 +95,7 @@ const Page = () => {
       <AdminHeader />
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-6 flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
-          <ShieldAlert className="h-5 w-5 mt-0.5" />
+          <ShieldAlert className="h-7 w-7" />
           <div>
             <p className="font-medium">Admin Permission Notice</p>
 
@@ -121,8 +121,8 @@ const Page = () => {
           </div>
         </div>
         <div className="space-y-1.5 mt-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Event Title
+          <label className="text-lg font-medium text-gray-700">
+            Event Title <span className="text-red-500">*</span>
           </label>
           <Input
             placeholder="Enter event title"
@@ -140,8 +140,8 @@ const Page = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Description
+          <label className="text-lg font-medium text-gray-700">
+            Description <span className="text-red-500">*</span>
           </label>
           <Input
             placeholder="Short description of the event"
@@ -158,8 +158,8 @@ const Page = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Event Date
+          <label className="text-lg font-medium text-gray-700">
+            Event Date <span className="text-red-500">*</span>
           </label>
           <Input
             type="date"
@@ -171,8 +171,8 @@ const Page = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Event Time
+          <label className="text-lg font-medium text-gray-700">
+            Event Time <span className="text-red-500">*</span>
           </label>
           <Input
             type="time"
@@ -184,7 +184,9 @@ const Page = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">Location</label>
+          <label className="text-lg font-medium text-gray-700">
+            Location <span className="text-red-500">*</span>
+          </label>
           <Input
             placeholder="e.g. Ulaanbaatar, American Corner"
             name="location"
@@ -195,8 +197,8 @@ const Page = () => {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-sm font-medium text-gray-700">
-            Registration URL
+          <label className="text-lg font-medium text-gray-700">
+            Registration URL <span className="text-gray-500">(Optional)</span>
           </label>
           <Input
             placeholder="https://..."
@@ -210,7 +212,7 @@ const Page = () => {
         <Card className="w-auto shadow-md border border-gray-200 mt-10">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-gray-700">
-              Image
+              Image <span className="text-red-500">*</span>
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">

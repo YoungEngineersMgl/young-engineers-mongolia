@@ -17,130 +17,139 @@ import {
 } from "lucide-react";
 import { useAdminAuth } from "@/providers/adminAuth";
 
-export default function AdminHeader() {
-  const router = useRouter();
-  const [open, setOpen] = useState(false);
-  const { setToken, setAdmin } = useAdminAuth();
-  const NavItem = ({
-    icon: Icon,
-    label,
-    path,
-    onClick,
-  }: {
-    icon: any;
-    label: string;
-    path: string;
-    onClick?: () => void;
-  }) => (
+type NavItemProps = {
+  icon: React.ElementType;
+  label: string;
+  path?: string;
+  onClick?: () => void;
+  router: ReturnType<typeof useRouter>;
+  setOpen: (open: boolean) => void;
+};
+
+const NavItem = ({
+  icon: Icon,
+  label,
+  path,
+  onClick,
+  router,
+  setOpen,
+}: NavItemProps) => {
+  return (
     <button
       onClick={() => {
-        if (onClick) {
-          onClick();
-        } else if (path) {
-          router.push(path);
-        }
+        if (onClick) onClick();
+        else if (path) router.push(path);
         setOpen(false);
       }}
-      className="flex items-center gap-2 text-slate-600 hover:text-gray-800 transition cursor-pointer"
+      className="flex items-center gap-2 text-slate-600 hover:text-gray-800 transition"
     >
       <Icon className="h-4 w-4" />
       {label}
     </button>
   );
+};
+
+export default function AdminHeader() {
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const { setToken, setAdmin } = useAdminAuth();
 
   const logOut = () => {
     setToken("");
     localStorage.removeItem("token");
-    window.location.href = "/login";
     setAdmin(null);
+    window.location.href = "/login";
   };
 
   return (
     <header className="w-full border-b bg-white">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
         <div
-          onClick={() => router.push("")}
-          className="flex items-center gap-2 mt-2"
+          onClick={() => router.push("/dashboard")}
+          className="flex items-center gap-2 cursor-pointer"
         >
-          <img src="logo.png" className="h-14 w-auto mb-2" />
+          <img src="logo.png" className="h-14 w-auto" />
         </div>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium hover:text-gray-950">
-          <NavItem icon={Home} label="Home" path="/dashboard" />
-          <NavItem icon={PenSquare} label="Create Blog" path="/blog-create" />
+        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+          <NavItem
+            icon={Home}
+            label="Home"
+            path="/dashboard"
+            router={router}
+            setOpen={setOpen}
+          />
+          <NavItem
+            icon={PenSquare}
+            label="Create Blog"
+            path="/blog-create"
+            router={router}
+            setOpen={setOpen}
+          />
           <NavItem
             icon={FolderPlus}
             label="Create Project"
             path="/project-create"
+            router={router}
+            setOpen={setOpen}
           />
           <NavItem
             icon={CalendarPlus}
             label="Create Event"
             path="/event-create"
+            router={router}
+            setOpen={setOpen}
           />
           <NavItem
             icon={Projector}
             label="Create Workshop"
             path="/workshop-create"
+            router={router}
+            setOpen={setOpen}
           />
-
           <NavItem
             icon={UserRoundPlus}
-            label="Add member"
+            label="Add Member"
             path="/create-admin"
+            router={router}
+            setOpen={setOpen}
           />
-
           <NavItem
             icon={LogOut}
             label="Log Out"
-            path="/login"
             onClick={logOut}
+            router={router}
+            setOpen={setOpen}
           />
         </nav>
 
-        <button
-          onClick={() => setOpen(!open)}
-          className="md:hidden text-slate-700"
-        >
-          {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        <button onClick={() => setOpen(!open)} className="md:hidden">
+          {open ? <X /> : <Menu />}
         </button>
       </div>
 
       {open && (
-        <div className="md:hidden border-t bg-white px-4 py-4 space-y-4 hover:text-gray-800">
-          <NavItem icon={Home} label="Home" path="/admin" />
-          <NavItem icon={PenSquare} label="Create Blog" path="/blog-create" />
+        <div className="md:hidden px-4 py-4 space-y-4">
           <NavItem
-            icon={FolderPlus}
-            label="Create Project"
-            path="/project-create"
+            icon={Home}
+            label="Home"
+            path="/dashboard"
+            router={router}
+            setOpen={setOpen}
           />
           <NavItem
-            icon={CalendarPlus}
-            label="Create Event"
-            path="/event-create"
-          />
-          <NavItem
-            icon={Projector}
-            label="Create Workshop"
-            path="/workshop-create"
-          />
-          <NavItem
-            icon={FilePlusCorner}
+            icon={PenSquare}
             label="Create Blog"
-            path="/event-create"
+            path="/blog-create"
+            router={router}
+            setOpen={setOpen}
           />
-          <NavItem
-            icon={UserRoundPlus}
-            label="Add member"
-            path="/create-admin"
-          />
-
           <NavItem
             icon={LogOut}
             label="Log Out"
-            path="/login"
             onClick={logOut}
+            router={router}
+            setOpen={setOpen}
           />
         </div>
       )}

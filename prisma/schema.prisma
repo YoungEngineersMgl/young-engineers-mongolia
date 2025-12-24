@@ -26,9 +26,8 @@ enum Category {
   BIOMEDICAL
 }
 
-
 enum Role {
-  RESEARCH 
+  RESEARCH
   MARKETING
   FOUNDER
   ENGINEERING
@@ -40,27 +39,27 @@ enum AdminStatus {
 }
 
 model Admin {
-  id       String   @id @default(nanoid())
-  role     Role
-  status AdminStatus
-  inviteToken String?
-  inviteExpiresAt   DateTime?
-  email    String   @unique
-  password String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id              String      @id @default(nanoid())
+  role            Role
+  status          AdminStatus
+  inviteToken     String?
+  inviteExpiresAt DateTime?
+  email           String      @unique
+  password        String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 
   workshopsMarketing Workshop[] @relation("marketingAdmin")
-  workshopsAdmin Workshop[] @relation("admin")
+  workshopsAdmin     Workshop[] @relation("admin")
 
   blogResearch Blog[] @relation("researchAdmin")
-  blogAdmin Blog[] @relation("admin")
+  blogAdmin    Blog[] @relation("admin")
 
   projectMarketing Project[] @relation("marketingAdmin")
-  projectAdmin Project[] @relation("admin")
+  projectAdmin     Project[] @relation("admin")
 
   eventMarketing Event[] @relation("marketingAdmin")
-  eventAdmin Event[] @relation("admin")
+  eventAdmin     Event[] @relation("admin")
 
   projectsEngineering Project[] @relation("engineeringAdmin")
 
@@ -70,82 +69,82 @@ model Admin {
 }
 
 model Blog {
-  id          String   @id @default(nanoid())
-  title       String
-  intro       String 
-  imgUrl      String 
-  closingNote String
-  content     Content[]
-  researchId String?
-  researchAdmin Admin?  @relation("researchAdmin", fields: [researchId], references: [id])
-  adminId String?
-  admin   Admin? @relation("admin", fields: [adminId], references: [id])
-  category    Category
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String    @id @default(nanoid())
+  title         String
+  intro         String
+  imgUrl        String
+  closingNote   String
+  publishedDate DateTime
+  content       Content[]
+  researchId    String?
+  researchAdmin Admin?    @relation("researchAdmin", fields: [researchId], references: [id])
+  adminId       String?
+  admin         Admin?    @relation("admin", fields: [adminId], references: [id])
+  category      Category
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Content {
-  id       String   @id @default(nanoid())
-  blogId String  
-  blog Blog @relation(fields:[blogId], references:[id])
-  subTitle String 
-  content   String
-  contentimgUrl String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String   @id @default(nanoid())
+  blogId        String
+  blog          Blog     @relation(fields: [blogId], references: [id])
+  subTitle      String
+  content       String
+  contentimgUrl String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Project {
-  id        String   @id @default(nanoid())
-  title     String
-  content   String
-  imgUrl    String
-  marketingId String?
-  marketingAdmin Admin?  @relation("marketingAdmin", fields: [marketingId], references: [id])
-  engineeringId String?
-  engineeringAdmin Admin? @relation("engineeringAdmin", fields:[engineeringId], references:[id])
-  adminId String?
-  admin   Admin? @relation("admin", fields: [adminId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id               String   @id @default(nanoid())
+  title            String
+  content          String
+  imgUrl           String
+  marketingId      String?
+  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id])
+  engineeringId    String?
+  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id])
+  adminId          String?
+  admin            Admin?   @relation("admin", fields: [adminId], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
- 
 
 model Event {
-  id          String   @id @default(nanoid())
-  title       String
-  content     String
-  imgUrl      String
-  eventDate   DateTime 
-  eventTime   String  
-  location String
-  registerUrl String?
-  engineeringId String?
-  engineeringAdmin Admin? @relation("engineeringAdmin", fields:[engineeringId], references:[id])
-  marketingId String?
-  marketingAdmin Admin?  @relation("marketingAdmin", fields: [marketingId], references: [id])
-  adminId String?
-  admin   Admin? @relation("admin", fields: [adminId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String   @id @default(nanoid())
+  title            String
+  content          String
+  imgUrl           String
+  eventDate        DateTime
+  eventTime        String
+  location         String
+  registerUrl      String?
+  engineeringId    String?
+  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id])
+  marketingId      String?
+  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id])
+  adminId          String?
+  admin            Admin?   @relation("admin", fields: [adminId], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
 
 model Workshop {
-  id          String   @id @default(nanoid())
-  title       String
-  content     String
-  imgUrl      String
-  workshopDate   DateTime 
-  workshopTime   String 
-  location String
-  registerUrl String?
-  marketingId String?
-  engineeringId String?
-  engineeringAdmin Admin? @relation("engineeringAdmin", fields:[engineeringId], references:[id])
-  adminId String?
-  admin   Admin? @relation("admin", fields: [adminId], references: [id])
-  marketingAdmin Admin?  @relation("marketingAdmin", fields: [marketingId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id               String   @id @default(nanoid())
+  title            String
+  content          String
+  imgUrl           String
+  workshopDate     DateTime
+  workshopTime     String
+  location         String
+  registerUrl      String?
+  marketingId      String?
+  engineeringId    String?
+  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id])
+  adminId          String?
+  admin            Admin?   @relation("admin", fields: [adminId], references: [id])
+  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id])
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }

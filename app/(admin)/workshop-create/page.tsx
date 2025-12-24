@@ -99,7 +99,7 @@ const Page = () => {
       <AdminHeader />
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-6 flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
-          <ShieldAlert className="h-5 w-5 mt-0.5" />
+          <ShieldAlert className="h-7 w-7" />
           <div>
             <p className="font-medium">Admin Permission Notice</p>
 
@@ -168,7 +168,7 @@ const Page = () => {
           </label>
           <Input
             type="date"
-           name="workshopDate"
+            name="workshopDate"
             value={inputValues.workshopDate}
             onChange={handleInputs}
             className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
@@ -233,7 +233,7 @@ const Page = () => {
                 </button>
               </div>
             ) : (
-              <label className="flex h-64 w-full max-w-xl cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed bg-gray-50 text-gray-400 hover:bg-gray-100">
+              <label className="flex h-full w-full max-w-xl cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed bg-gray-50 text-gray-400 hover:bg-gray-100">
                 <ImageIcon className="h-10 w-10" />
                 <span className="mt-2 text-sm">Click to upload image</span>
                 <input

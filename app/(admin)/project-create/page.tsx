@@ -71,14 +71,12 @@ const Page = () => {
     setImgFile(null);
   };
 
-  
-
   return (
     <div className="min-h-screen bg-slate-100">
       <AdminHeader />
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-6 flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
-          <ShieldAlert className="h-5 w-5 mt-0.5" />
+          <ShieldAlert className="h-7 w-7" />
           <div>
             <p className="font-medium">Admin Permission Notice</p>
             <p>

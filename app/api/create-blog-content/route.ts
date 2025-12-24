@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
     const { blogId, subTitle, content, contentimgUrl } = body;
 
-    if (!blogId || !subTitle || !content || !contentimgUrl) {
+    if (!blogId || !subTitle || !content) {
       return NextResponse.json({ error: "Missing fields" }, { status: 403 });
     }
 

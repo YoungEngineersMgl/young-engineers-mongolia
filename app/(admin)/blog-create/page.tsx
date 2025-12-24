@@ -42,6 +42,7 @@ const Page = () => {
       handleUploadUrl: "/api/upload",
     });
     setImageUrl(uploaded.url);
+    setContentimgUrl(uploaded.url);
     setUploading(false);
   };
 
@@ -70,17 +71,19 @@ const Page = () => {
           </div>
         </div>
         <div>
-          <div>Blog Title</div>
+          <div className="text-lg font-medium text-gray-700">Blog Title</div>
           <Input
             placeholder="Blog Title"
-            className="bg-white"
+            className="bg-white mt-2"
             value={inputValues.title}
             onChange={(e) => handleInputs(e)}
           />
-          <div>Blog Intro</div>
+          <div className="text-lg font-medium text-gray-700 mt-2">
+            Blog Intro
+          </div>
           <textarea
             placeholder="Blog Intro"
-            className="w-full rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white mt-5"
+            className="w-full rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white mt-3"
             value={inputValues.intro}
             onChange={(e) => handleInputs(e)}
           />
@@ -137,12 +140,14 @@ const Page = () => {
               </Button>
             </CardContent>
           </Card>
-          <div>Closing Note</div>
+          <div className="text-lg font-medium text-gray-700 mt-5">
+            Closing Note
+          </div>
           <textarea
             placeholder="Closing note"
             value={inputValues.closingNote}
             onChange={(e) => handleInputs(e)}
-            className="w-full rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white mt-5"
+            className="w-full rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white mt-3"
           />
 
           <Button
@@ -162,19 +167,23 @@ const Page = () => {
         </div>
         <div>
           <div className="text-2xl font-bold mt-5">Content</div>
-          <div>Sub title</div>
+          <div className="text-lg font-medium text-gray-700 mt-3">
+            Sub title
+          </div>
           <Input
             placeholder="sub title"
-            className="bg-white mt-5"
+            className="bg-white mt-2"
             value={inputValues.subTitle}
             onChange={(e) => handleInputs(e)}
           />
-          <div>sub content</div>
+          <div className="text-lg font-medium text-gray-700 mt-3">
+            sub content
+          </div>
           <textarea
             placeholder="content"
             value={inputValues.blogContent}
             onChange={(e) => handleInputs(e)}
-            className="w-full rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white mt-5"
+            className="w-full rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white mt-2"
           />
 
           <Card className="w-auto shadow-md border border-gray-200 mt-10">
@@ -233,10 +242,9 @@ const Page = () => {
           <Button
             disabled={
               uploading ||
-              !inputValues.title ||
-              !inputValues.intro ||
-              !inputValues.closingNote ||
-              !imageUrl
+              !inputValues.subTitle ||
+              !inputValues.blogContent ||
+              !contentimgUrl
             }
             className="bg-[#4169E1] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
                      shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]

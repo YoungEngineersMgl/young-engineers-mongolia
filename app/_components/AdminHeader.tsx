@@ -145,6 +145,34 @@ export default function AdminHeader() {
             setOpen={setOpen}
           />
           <NavItem
+            icon={FolderPlus}
+            label="Create Project"
+            path="/project-create"
+            router={router}
+            setOpen={setOpen}
+          />
+          <NavItem
+            icon={CalendarPlus}
+            label="Create Event"
+            path="/event-create"
+            router={router}
+            setOpen={setOpen}
+          />
+          <NavItem
+            icon={Projector}
+            label="Create Workshop"
+            path="/workshop-create"
+            router={router}
+            setOpen={setOpen}
+          />
+          <NavItem
+            icon={UserRoundPlus}
+            label="Add Member"
+            path="/create-admin"
+            router={router}
+            setOpen={setOpen}
+          />
+          <NavItem
             icon={LogOut}
             label="Log Out"
             onClick={logOut}

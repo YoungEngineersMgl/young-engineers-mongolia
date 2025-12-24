@@ -61,7 +61,7 @@ export async function POST(req: Request) {
             title,
             content,
             imgUrl,
-            
+
             marketingId: decoded.id,
           },
         });

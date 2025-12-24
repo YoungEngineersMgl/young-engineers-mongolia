@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { LogOut } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
+import { FilePlusCorner } from "lucide-react";
+import { Projector } from "lucide-react";
 
 import {
   Home,
@@ -77,6 +79,12 @@ export default function AdminHeader() {
             path="/event-create"
           />
           <NavItem
+            icon={Projector}
+            label="Create Workshop"
+            path="/workshop-create"
+          />
+
+          <NavItem
             icon={UserRoundPlus}
             label="Add member"
             path="/create-admin"
@@ -110,6 +118,16 @@ export default function AdminHeader() {
           <NavItem
             icon={CalendarPlus}
             label="Create Event"
+            path="/event-create"
+          />
+          <NavItem
+            icon={Projector}
+            label="Create Workshop"
+            path="/workshop-create"
+          />
+          <NavItem
+            icon={FilePlusCorner}
+            label="Create Blog"
             path="/event-create"
           />
           <NavItem

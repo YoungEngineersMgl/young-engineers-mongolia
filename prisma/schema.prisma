@@ -136,8 +136,8 @@ model Workshop {
   title       String
   content     String
   imgUrl      String
-  eventDate   DateTime 
-  eventTime   String 
+  workshopDate   DateTime 
+  workshopTime   String 
   location String
   registerUrl String?
   marketingId String?

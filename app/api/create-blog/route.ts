@@ -51,11 +51,16 @@ export async function POST(req: Request) {
             intro,
             imgUrl,
             closingNote,
-            researchId: decoded.id,
             category,
-            publishedDate: new Date(body.publishedDate),
+            publishedDate: publishedDate,
+            researchAdmin: {
+              connect: {
+                id: decoded.id,
+              },
+            },
           },
         });
+
         return NextResponse.json(createBlog, { status: 200 });
       }
     }
@@ -72,9 +77,14 @@ export async function POST(req: Request) {
             intro,
             imgUrl,
             closingNote,
-            adminId: decoded.id,
             category,
-            publishedDate,
+            publishedDate: publishedDate,
+
+            admin: {
+              connect: {
+                id: decoded.id,
+              },
+            },
           },
         });
 

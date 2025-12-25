@@ -113,3 +113,12 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: err }, { status: 500 });
   }
 }
+
+export async function GET() {
+  try {
+    const getProjects = await prisma.project.findMany({});
+    return NextResponse.json(getProjects, { status: 200 });
+  } catch (err) {
+    return NextResponse.json(err, { status: 500 });
+  }
+}

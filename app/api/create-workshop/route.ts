@@ -140,3 +140,12 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: err }, { status: 500 });
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const getWorkshop = await prisma.workshop.findMany({});
+    return NextResponse.json(getWorkshop, { status: 200 });
+  } catch (err) {
+    return NextResponse.json(err, { status: 500 });
+  }
+}

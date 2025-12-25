@@ -143,6 +143,8 @@ const Page = () => {
     }
   };
 
+  console.log(inputValues.publishedDate);
+  console.log(publishedDatePrisma);
   const createBlogContent = async () => {
     const response = await fetch("/api/create-blog-content", {
       method: "POST",
@@ -190,7 +192,6 @@ const Page = () => {
           </div>
         </div>
 
-      
         <div>
           <div className="text-lg font-medium text-gray-700">
             Blog Title <span className="text-red-500">*</span>
@@ -214,7 +215,6 @@ const Page = () => {
             name="intro"
           />
 
-       
           <Card className="w-auto shadow-md border border-gray-200 mt-6">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-gray-700">

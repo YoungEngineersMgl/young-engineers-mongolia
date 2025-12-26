@@ -116,6 +116,18 @@ export async function DELETE(req: Request) {
   }
 }
 
+export enum Category {
+  SOFTWARE = "SOFTWARE",
+  MECHANICAL = "MECHANICAL",
+  NANO = "NANO",
+  ENVIRONMENTAL = "ENVIRONMENTAL",
+  ELECTRICAL = "ELECTRICAL",
+  AEROSPACE = "AEROSPACE",
+  CIVIL = "CIVIL",
+  CHEMICAL = "CHEMICAL",
+  BIOMEDICAL = "BIOMEDICAL",
+}
+
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
@@ -123,7 +135,7 @@ export async function PUT(req: Request) {
     if (!authHeader) {
       return NextResponse.json({ error: "Missing token" }, { status: 401 });
     }
-    const token = authHeader?.split(" ")[1];
+    const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET!
@@ -131,54 +143,52 @@ export async function PUT(req: Request) {
 
     const { blogId, newTitle, newImgUrl, newCategory, newPublishedDate } = body;
 
-    if (!blogId) {
+    if (!blogId)
       return NextResponse.json({ error: "Missing id" }, { status: 401 });
+
+    // Role check
+    if (decoded.role !== "RESEARCH" && decoded.role !== "FOUNDER") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
 
-    if (decoded.role === "RESEARCH") {
-      const findResearch = await prisma.admin.findUnique({
-        where: { id: decoded.id },
-      });
+    const admin = await prisma.admin.findUnique({ where: { id: decoded.id } });
+    if (!admin)
+      return NextResponse.json({ error: "Admin not found" }, { status: 404 });
 
-      if (findResearch) {
-        const updateBlog = await prisma.blog.update({
-          where: {
-            id: blogId,
-          },
-          data: {
-            title: newTitle,
-            imgUrl: newImgUrl,
-            category: newCategory,
-            publishedDate: newPublishedDate,
-          },
-        });
+    // Build update object dynamically
+    const dataToUpdate: {
+      title?: string;
+      imgUrl?: string;
+      category?: Category;
+      publishedDate?: Date;
+    } = {};
 
-        return NextResponse.json(updateBlog, { status: 200 });
+    if (typeof newTitle === "string") dataToUpdate.title = newTitle;
+    if (typeof newImgUrl === "string") dataToUpdate.imgUrl = newImgUrl;
+
+    if (typeof newCategory === "string") {
+      if (Object.values(Category).includes(newCategory as Category)) {
+        dataToUpdate.category = newCategory as Category;
+      } else {
+        return NextResponse.json(
+          { error: "Invalid category" },
+          { status: 400 }
+        );
       }
     }
+    if (newPublishedDate)
+      dataToUpdate.publishedDate = new Date(newPublishedDate);
 
-    if (decoded.role === "FOUNDER") {
-      const findAdmin = await prisma.admin.findUnique({
-        where: { id: decoded.id },
-      });
+    const updateBlog = await prisma.blog.update({
+      where: { id: blogId },
+      data: dataToUpdate,
+    });
 
-      if (findAdmin) {
-        const updateBlog = await prisma.blog.update({
-          where: {
-            id: blogId,
-          },
-          data: {
-            title: newTitle,
-            imgUrl: newImgUrl,
-            category: newCategory,
-            publishedDate: newPublishedDate,
-          },
-        });
-
-        return NextResponse.json(updateBlog, { status: 200 });
-      }
-    }
+    return NextResponse.json(updateBlog, { status: 200 });
   } catch (err) {
-    return NextResponse.json(err, { status: 500 });
+    return NextResponse.json(
+      { error: (err as Error).message },
+      { status: 500 }
+    );
   }
 }

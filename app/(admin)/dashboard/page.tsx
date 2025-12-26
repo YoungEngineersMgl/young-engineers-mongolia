@@ -4,7 +4,9 @@ import AdminHeader from "@/app/_components/AdminHeader";
 import { useState, useEffect, ChangeEvent } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
+  Calendar,
   ChevronDown,
+  Clock,
   ImageIcon,
   Loader2,
   PenLine,
@@ -251,28 +253,51 @@ const Page = () => {
   );
 
   const updateBlog = async (blogId: string) => {
+    const payload: {
+      blogId: string;
+      newTitle?: string;
+      newImgUrl?: string;
+      newCategory?: string;
+      newPublishedDate?: string;
+    } = { blogId };
+
+    if (inputValues.newTitle) payload.newTitle = inputValues.newTitle;
+    if (imageUrl) payload.newImgUrl = imageUrl;
+    if (category) payload.newCategory = category;
+    if (publishedDatePrisma) {
+      const date = new Date(publishedDatePrisma);
+      if (!isNaN(date.getTime())) {
+        payload.newPublishedDate = date.toISOString();
+      } else {
+        console.warn("Invalid date:", publishedDatePrisma);
+      }
+    }
     const response = await fetch("/api/create-blog", {
       method: "PUT",
       headers: {
         "Content-type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        blogId,
-        newTitle: inputValues.newTitle,
-        newImgUrl: imageUrl,
-        newCategory: category,
-        newPublishedDate: publishedDatePrisma,
-      }),
+      body: JSON.stringify(payload),
     });
 
     if (response.ok) {
       toast.success("Updated successfully");
+      setInputValues({
+        newTitle: "",
+        newImgUrl: "",
+        newPublishedDate: "",
+      });
+      setImageUrl("");
+      setCategory("");
       fetchBlogs();
+    } else if (!response.ok) {
+      const data = await response.json();
+      toast.error(data.error || "Something went wrong");
     }
   };
 
-  console.log(blogs);
+  console.log(projects);
   useEffect(() => {
     if (!token) return;
 
@@ -286,463 +311,532 @@ const Page = () => {
     loadData();
   }, [token]);
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-gray-50">
       <AdminHeader />
-      <div>
-        <div className="text-xl font-bold mb-4 ">Blogs</div>
-        <Carousel
-          opts={{ align: "start" }}
-          className="w-full max-w-5xl mx-auto mt-10"
-        >
-          <CarouselContent className="-ml-4">
-            {blogs.map((blog) => (
-              <CarouselItem
-                key={blog.id}
-                className="pl-4 sm:basis-1/2 lg:basis-1/3"
-              >
-                <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition">
-                  <div className="relative h-77 w-full overflow-hidden">
-                    <img
-                      src={blog.imgUrl}
-                      alt={blog.title}
-                      className="h-full w-full object-cover hover:scale-105 transition"
-                    />
-                  </div>
-
-                  <CardContent className="p-4 space-y-2">
-                    <div className="flex justify-between">
-                      <p className="text-xs font-medium text-muted-foreground uppercase">
-                        {blog.category}
-                      </p>
-
-                      <Dialog>
-                        <form>
-                          <DialogTrigger asChild className="text-red-500">
-                            <Trash />
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>
-                                Do you really want to delete this blog?
-                              </DialogTitle>
-                              <DialogDescription>
-                                Zovhon Founder , Research admin users delete
-                                hiij chadna.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="grid gap-4"></div>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
-                              </DialogClose>
-                              <Button onClick={() => deleteBlog(blog.id)}>
-                                Delete
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </form>
-                      </Dialog>
-
-                      <Dialog>
-                        <form>
-                          <DialogTrigger asChild className="text-gray-800">
-                            <PenLine />
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>Edit the blog</DialogTitle>
-                              <DialogDescription>
-                                Zovhon Founder , Research admin users edit hiij
-                                chadna.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="grid gap-4">
-                              <div>blog title</div>
-                              <Input
-                                placeholder={blog.title}
-                                value={inputValues.newTitle}
-                                onChange={handleInputs}
-                                name="newTitle"
-                              />
-                              <div>blog category</div>
-                              {/* <Input
-                                placeholder={blog.category}
-                                value={inputValues.newCategory}
-                                onChange={handleInputs}
-                                name="newCategory"
-                              />{" "} */}
-                              <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
+      <main className="max-w-6xl mx-auto px-4 py-8 space-y-12">
+        <section>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Blogs</h2>
+          <Carousel opts={{ align: "start" }} className="relative">
+            <CarouselContent className="gap-4">
+              {blogs.map((blog) => (
+                <CarouselItem
+                  key={blog.id}
+                  className="sm:basis-1/2 lg:basis-1/3"
+                >
+                  <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition duration-300">
+                    <div className="relative h-64 w-full overflow-hidden">
+                      <img
+                        src={blog.imgUrl}
+                        alt={blog.title}
+                        className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <CardContent className="p-4 space-y-3">
+                      <div className="flex justify-between items-start">
+                        <span className="text-xs font-semibold text-muted-foreground uppercase">
+                          {blog.category}
+                        </span>
+                        <div className="flex gap-2">
+                          <Dialog>
+                            <form>
+                              <DialogTrigger asChild>
+                                <Trash className="text-red-500 cursor-pointer" />
+                              </DialogTrigger>
+                              <DialogContent className="sm:max-w-[400px]">
+                                <DialogHeader>
+                                  <DialogTitle>Confirm Delete</DialogTitle>
+                                  <DialogDescription className="text-gray-800">
+                                    Only Founder or Research admin can delete
+                                    this blog.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter className="flex justify-end gap-2">
+                                  <DialogClose asChild>
+                                    <Button
+                                      className="bg-[#4169E1] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
+                     shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
+                     transition-all hover:bg-blue-800 hover:text-white "
+                                    >
+                                      Cancel
+                                    </Button>
+                                  </DialogClose>
                                   <Button
-                                    variant="outline"
-                                    className="w-full justify-between mt-2 cursor-pointer"
+                                    onClick={() => deleteBlog(blog.id)}
+                                    className="bg-[#ec2222] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
+                     shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
+                     transition-all hover:bg-red-600 hover:text-white "
                                   >
-                                    {category || "Select category"}
-                                    <ChevronDown className="h-4 w-4 opacity-60" />
+                                    Delete
                                   </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent className="w-full">
-                                  <DropdownMenuLabel>
-                                    Choose a category
-                                  </DropdownMenuLabel>
-                                  <DropdownMenuSeparator />
-                                  <DropdownMenuItem
-                                    onClick={() => setCategory("SOFTWARE")}
-                                  >
-                                    Software Engineering
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => setCategory("MECHANICAL")}
-                                  >
-                                    Mechanical Engineering
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => setCategory("NANO")}
-                                  >
-                                    Nano Engineering
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => setCategory("ENVIRONMENTAL")}
-                                  >
-                                    Environmental Engineering
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => setCategory("ELECTRICAL")}
-                                  >
-                                    Electrical Engineering
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => setCategory("AEROSPACE")}
-                                  >
-                                    Aerospace Engineering
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => setCategory("CIVIL")}
-                                  >
-                                    Civil Engineering
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => setCategory("CHEMICAL")}
-                                  >
-                                    Chemical Engineering
-                                  </DropdownMenuItem>
-                                  <DropdownMenuItem
-                                    onClick={() => setCategory("BIOMEDICAL")}
-                                  >
-                                    Biomedical Engineering
-                                  </DropdownMenuItem>
-                                </DropdownMenuContent>
-                              </DropdownMenu>
-                              <div>blog published date</div>
-                              <Input
-                                type="date"
-                                value={inputValues.newPublishedDate}
-                                onChange={handleInputs}
-                                name="newPublishedDate"
-                              />
-                              <div>blog image</div>
-                              <Card className="w-auto shadow-md border border-gray-200">
-                                <CardHeader>
-                                  <CardTitle className="text-2xl font-bold text-gray-700">
-                                    Image{" "}
-                                  </CardTitle>
-                                </CardHeader>
-                                <CardContent className="flex flex-col gap-4">
-                                  {imageUrl ? (
-                                    <div className="relative w-full max-w-xl">
-                                      <img
-                                        src={imageUrl}
-                                        className="h-64 w-full rounded-xl object-cover border"
-                                      />
-                                      <button
-                                        onClick={removeImg}
-                                        className="absolute top-2 right-2 rounded-full bg-black/60 p-2 text-white hover:bg-black"
+                                </DialogFooter>
+                              </DialogContent>
+                            </form>
+                          </Dialog>
+
+                          <Dialog>
+                            <form>
+                              <DialogTrigger asChild>
+                                <PenLine className="text-gray-700 cursor-pointer" />
+                              </DialogTrigger>
+                              <DialogContent className="sm:max-w-[425px]">
+                                <DialogHeader>
+                                  <DialogTitle className="text-center">
+                                    Edit Blog
+                                  </DialogTitle>
+                                  <DialogDescription className="text-gray-800">
+                                    Only Founder or Research admin can edit this
+                                    blog.
+                                  </DialogDescription>
+                                </DialogHeader>
+                                <div className="grid gap-3 mt-2">
+                                  <Input
+                                    placeholder={blog.title}
+                                    value={inputValues.newTitle}
+                                    onChange={handleInputs}
+                                    name="newTitle"
+                                  />
+                                  <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                      <Button
+                                        variant="outline"
+                                        className="w-full justify-between"
                                       >
-                                        <X className="h-4 w-4" />
-                                      </button>
-                                    </div>
-                                  ) : (
-                                    <label className="flex h-64 w-full max-w-xl cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed bg-gray-50 text-gray-400 hover:bg-gray-100">
-                                      <ImageIcon className="h-10 w-10" />
-                                      <span className="mt-2 text-sm">
-                                        Click to upload image
-                                      </span>
-                                      <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleFile}
-                                        className="hidden"
-                                      />
-                                    </label>
-                                  )}
+                                        {category || "Select category"}
+                                        <ChevronDown className="w-4 h-4 opacity-60" />
+                                      </Button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent className="w-full">
+                                      <DropdownMenuLabel>
+                                        Choose Category
+                                      </DropdownMenuLabel>
+                                      <DropdownMenuSeparator />
+                                      <DropdownMenuContent className="w-full">
+                                        <DropdownMenuLabel>
+                                          Choose a category
+                                        </DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            setCategory("SOFTWARE")
+                                          }
+                                        >
+                                          Software Engineering
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            setCategory("MECHANICAL")
+                                          }
+                                        >
+                                          Mechanical Engineering
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                          onClick={() => setCategory("NANO")}
+                                        >
+                                          Nano Engineering
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            setCategory("ENVIRONMENTAL")
+                                          }
+                                        >
+                                          Environmental Engineering
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            setCategory("ELECTRICAL")
+                                          }
+                                        >
+                                          Electrical Engineering
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            setCategory("AEROSPACE")
+                                          }
+                                        >
+                                          Aerospace Engineering
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                          onClick={() => setCategory("CIVIL")}
+                                        >
+                                          Civil Engineering
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            setCategory("CHEMICAL")
+                                          }
+                                        >
+                                          Chemical Engineering
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                          onClick={() =>
+                                            setCategory("BIOMEDICAL")
+                                          }
+                                        >
+                                          Biomedical Engineering
+                                        </DropdownMenuItem>
+                                      </DropdownMenuContent>
+                                    </DropdownMenuContent>
+                                  </DropdownMenu>
+                                  <Input
+                                    type="date"
+                                    value={inputValues.newPublishedDate}
+                                    onChange={handleInputs}
+                                    name="newPublishedDate"
+                                  />
+
+                                  {/* IMAGE UPLOAD */}
+                                  <div className="flex flex-col gap-2">
+                                    {imageUrl ? (
+                                      <div className="relative w-full h-48">
+                                        <img
+                                          src={imageUrl}
+                                          className="h-full w-full rounded-xl object-cover border"
+                                        />
+                                        <button
+                                          onClick={removeImg}
+                                          className="absolute top-2 right-2 bg-black/50 text-white rounded-full p-1 hover:bg-black transition"
+                                        >
+                                          <X className="w-4 h-4" />
+                                        </button>
+                                      </div>
+                                    ) : (
+                                      <label className="flex h-48 w-full cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed bg-gray-50 text-gray-400 hover:bg-gray-100">
+                                        <ImageIcon className="w-10 h-10" />
+                                        <span className="mt-2 text-sm">
+                                          Click to upload image
+                                        </span>
+                                        <input
+                                          type="file"
+                                          accept="image/*"
+                                          onChange={handleFile}
+                                          className="hidden"
+                                        />
+                                      </label>
+                                    )}
+                                    <Button
+                                      onClick={uploadedImg}
+                                      disabled={!imgFile || uploading}
+                                      className="w-full sm:w-auto flex items-center justify-center gap-2"
+                                    >
+                                      {uploading ? (
+                                        <Loader2 className="w-4 h-4 animate-spin" />
+                                      ) : (
+                                        <UploadCloud className="w-4 h-4" />
+                                      )}
+                                      {uploading
+                                        ? "Uploading..."
+                                        : "Upload Image"}
+                                    </Button>
+                                  </div>
+                                </div>
+                                <DialogFooter className="flex justify-end gap-2 mt-2">
+                                  <DialogClose asChild>
+                                    <Button
+                                      className="bg-[#8ca4ea] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
+                     shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
+                     transition-all hover:bg-blue-900 hover:text-white "
+                                    >
+                                      Cancel
+                                    </Button>
+                                  </DialogClose>
                                   <Button
-                                    onClick={uploadedImg}
-                                    disabled={!imgFile || uploading}
+                                    onClick={() => updateBlog(blog.id)}
+                                    className="bg-[#072377] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
+                     shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
+                     transition-all hover:bg-blue-900 hover:text-white "
+                                  >
+                                    Update
+                                  </Button>
+                                </DialogFooter>
+                              </DialogContent>
+                            </form>
+                          </Dialog>
+                        </div>
+                      </div>
+
+                      <h3 className="text-lg font-semibold line-clamp-2">
+                        {blog.title}
+                      </h3>
+                      <span className="text-xs text-gray-500 uppercase">
+                        {blog.publishedDate
+                          ? new Date(blog.publishedDate).toLocaleDateString()
+                          : ""}
+                      </span>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="-left-10" />
+            <CarouselNext className="-right-10" />
+          </Carousel>
+        </section>
+        <section>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Projects</h2>
+          <Carousel opts={{ align: "start" }} className="relative">
+            <CarouselContent className="-ml-4">
+              {projects.map((project) => (
+                <CarouselItem
+                  key={project.id}
+                  className="pl-4 sm:basis-1/2 lg:basis-1/2"
+                >
+                  <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition">
+                    <div className="relative h-77 w-full overflow-hidden">
+                      <img
+                        src={project.imgUrl}
+                        alt={project.title}
+                        className="h-full w-full object-cover hover:scale-105 transition"
+                      />
+                    </div>
+
+                    <CardContent className="p-4 space-y-2">
+                      <div className="flex justify-between">
+                        <div className="text-lg font-semibold line-clamp-2">
+                          {project.title}
+                        </div>
+                        <Dialog>
+                          <form>
+                            <DialogTrigger asChild className="text-red-500">
+                              <Trash />
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                <DialogTitle>
+                                  Do you really want to delete this project?
+                                </DialogTitle>
+                                <DialogDescription className="text-gray-800">
+                                  Zovhon Founder , Marketing, Engineering admin
+                                  users delete hiij chadna.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="grid gap-4"></div>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button
                                     className="bg-[#4169E1] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
                      shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
-                     transition-all hover:bg-blue-800 hover:text-white w-auto"
+                     transition-all hover:bg-blue-800 hover:text-white "
                                   >
-                                    {uploading ? (
-                                      <>
-                                        <Loader2 className="w-4 h-4 animate-spin" />
-                                        Uploading...
-                                      </>
-                                    ) : (
-                                      <>
-                                        <UploadCloud className="w-4 h-4" />
-                                        Upload Image
-                                      </>
-                                    )}
+                                    Cancel
                                   </Button>
-                                </CardContent>
-                              </Card>
-                            </div>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
-                              </DialogClose>
-                              <Button onClick={() => updateBlog(blog.id)}>
-                                Update
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </form>
-                      </Dialog>
-                    </div>
-
-                    <h3 className="text-lg font-semibold line-clamp-2">
-                      {blog.title}
-                    </h3>
-                    <div className="text-xs font-medium text-muted-foreground uppercase">
-                      {blog.publishedDate}
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="-left-12" />
-          <CarouselNext className="-right-12" />
-        </Carousel>
-        <div>Projects</div>
-
-        <Carousel
-          opts={{ align: "start" }}
-          className="w-full max-w-5xl mx-auto mt-10"
-        >
-          <CarouselContent className="-ml-4">
-            {projects.map((project) => (
-              <CarouselItem
-                key={project.id}
-                className="pl-4 sm:basis-1/2 lg:basis-1/2"
-              >
-                <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition">
-                  <div className="relative h-77 w-full overflow-hidden">
-                    <img
-                      src={project.imgUrl}
-                      alt={project.title}
-                      className="h-full w-full object-cover hover:scale-105 transition"
-                    />
-                  </div>
-
-                  <CardContent className="p-4 space-y-2">
-                    <div className="flex justify-between">
-                      <div className="text-lg font-semibold line-clamp-2">
-                        {project.title}
+                                </DialogClose>
+                                <Button
+                                  className="bg-[#ec2222] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
+                     shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
+                     transition-all hover:bg-red-600 hover:text-white "
+                                  onClick={() => deleteProject(project.id)}
+                                >
+                                  Delete
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </form>
+                        </Dialog>
                       </div>
-                      <Dialog>
-                        <form>
-                          <DialogTrigger asChild className="text-red-500">
-                            <Trash />
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>
-                                Do you really want to delete this project?
-                              </DialogTitle>
-                              <DialogDescription>
-                                Zovhon Founder , Marketing, Engineering admin
-                                users delete hiij chadna.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="grid gap-4"></div>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
-                              </DialogClose>
-                              <Button onClick={() => deleteProject(project.id)}>
-                                Delete
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </form>
-                      </Dialog>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="-left-10" />
+            <CarouselNext className="-right-10" />
+          </Carousel>
+        </section>
+        <section>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Workshops</h2>
+          <Carousel opts={{ align: "start" }} className="relative">
+            <CarouselContent className="gap-4">
+              {workshops.map((workshop) => (
+                <CarouselItem
+                  key={workshop.id}
+                  className="sm:basis-1/2 lg:basis-1/3"
+                >
+                  <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition duration-300">
+                    <div className="relative h-64 w-full overflow-hidden">
+                      <img
+                        src={workshop.imgUrl}
+                        alt={workshop.title}
+                        className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="left-[-48px]" />
-          <CarouselNext className="right-[-48px]" />
-        </Carousel>
-        <div>Workshops</div>
-        <Carousel
-          opts={{ align: "start" }}
-          className="w-full max-w-5xl mx-auto mt-10"
-        >
-          <CarouselContent className="-ml-4">
-            {workshops.map((workshop) => (
-              <CarouselItem
-                key={workshop.id}
-                className="pl-4 sm:basis-1/2 lg:basis-1/3"
-              >
-                <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition">
-                  <div className="relative h-77 w-full overflow-hidden">
-                    <img
-                      src={workshop.imgUrl}
-                      alt={workshop.title}
-                      className="h-full w-full object-cover hover:scale-105 transition"
-                    />
-                  </div>
 
-                  <CardContent className="p-4 space-y-2">
-                    <div className="flex justify-between">
-                      <div className="text-lg font-semibold line-clamp-2">
-                        {workshop.title}
+                    {/* Workshop Info */}
+                    <CardContent className="p-4 space-y-3">
+                      {/* Header with Title + Delete */}
+                      <div className="flex justify-between items-start">
+                        <h3 className="text-lg font-semibold line-clamp-2">
+                          {workshop.title}
+                        </h3>
+
+                        {/* Delete Dialog */}
+                        <Dialog>
+                          <form>
+                            <DialogTrigger asChild>
+                              <Trash className="text-red-500 cursor-pointer" />
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[400px]">
+                              <DialogHeader>
+                                <DialogTitle>Confirm Delete</DialogTitle>
+                                <DialogDescription className="text-gray-800">
+                                  Only Founder, Marketing, or Engineering admin
+                                  can delete this workshop.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <DialogFooter className="flex justify-end gap-2">
+                                <DialogClose asChild>
+                                  <Button
+                                    className="bg-[#4169E1] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
+                     shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
+                     transition-all hover:bg-blue-800 hover:text-white "
+                                  >
+                                    Cancel
+                                  </Button>
+                                </DialogClose>
+                                <Button
+                                  className="bg-[#ec2222] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
+                     shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
+                     transition-all hover:bg-red-600 hover:text-white "
+                                  onClick={() => deletedWorkshop(workshop.id)}
+                                >
+                                  Delete
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </form>
+                        </Dialog>
                       </div>
-                      <Dialog>
-                        <form>
-                          <DialogTrigger asChild className="text-red-500">
-                            <Trash />
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>
-                                Do you really want to delete this workshop?
-                              </DialogTitle>
-                              <DialogDescription>
-                                Zovhon Founder , Marketing, Engineering admin
-                                users delete hiij chadna.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="grid gap-4"></div>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
-                              </DialogClose>
-                              <Button
-                                onClick={() => deletedWorkshop(workshop.id)}
-                              >
-                                Delete
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </form>
-                      </Dialog>
-                    </div>
-                    <div className="text-xs font-medium text-gray-800 uppercase flex gap-2">
-                      <MapPin />
 
-                      <div className="mt-0.5"> {workshop.location} </div>
-                    </div>
-                    <div className="text-xs font-medium text-gray-800 uppercase flex gap-2">
-                      <MapPin />
-
-                      <div className="mt-0.5"> {workshop.workshopDate} </div>
-                    </div>
-                    <div className="text-xs font-medium text-gray-800 uppercase flex gap-2">
-                      <MapPin />
-
-                      <div className="mt-0.5"> {workshop.workshopTime} </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="left-[-48px]" />
-          <CarouselNext className="right-[-48px]" />
-        </Carousel>
-
-        <div>Events</div>
-        <Carousel
-          opts={{ align: "start" }}
-          className="w-full max-w-5xl mx-auto mt-10"
-        >
-          <CarouselContent className="-ml-4">
-            {events.map((event) => (
-              <CarouselItem
-                key={event.id}
-                className="pl-4 sm:basis-1/2 lg:basis-1/3"
-              >
-                <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition">
-                  <div></div>
-                  <div className="relative h-77 w-full overflow-hidden">
-                    <img
-                      src={event.imgUrl}
-                      alt={event.title}
-                      className="h-full w-full object-cover hover:scale-105 transition"
-                    />
-                  </div>
-
-                  <CardContent className="p-4 space-y-2">
-                    <div className="flex justify-between">
-                      <div className="text-lg font-semibold line-clamp-2">
-                        {event.title}
+                      {/* Workshop Details */}
+                      <div className="flex flex-col gap-2 text-sm text-gray-600">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-gray-500" />
+                          <span>{workshop.location}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-gray-500" />
+                          <span>
+                            {" "}
+                            {workshop.workshopDate
+                              ? new Date(
+                                  workshop.workshopDate
+                                ).toLocaleDateString()
+                              : ""}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-gray-500" />
+                          <span>{workshop.workshopTime}</span>
+                        </div>
                       </div>
-                      <Dialog>
-                        <form>
-                          <DialogTrigger asChild className="text-red-500">
-                            <Trash />
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                              <DialogTitle>
-                                Do you really want to delete this event?
-                              </DialogTitle>
-                              <DialogDescription>
-                                Zovhon Founder , Marketing, Engineering admin
-                                users delete hiij chadna.
-                              </DialogDescription>
-                            </DialogHeader>
-                            <div className="grid gap-4"></div>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
-                              </DialogClose>
-                              <Button onClick={() => deleteEvent(event.id)}>
-                                Delete
-                              </Button>
-                            </DialogFooter>
-                          </DialogContent>
-                        </form>
-                      </Dialog>
-                    </div>
-                    <div className="text-xs font-medium text-gray-800 uppercase flex gap-2">
-                      <MapPin />
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
 
-                      <div className="mt-0.5"> {event.location} </div>
+            {/* Carousel Arrows */}
+            <CarouselPrevious className="-left-10" />
+            <CarouselNext className="-right-10" />
+          </Carousel>
+        </section>
+        <section>
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Events</h2>
+          <Carousel opts={{ align: "start" }} className="relative">
+            <CarouselContent className="gap-4">
+              {events.map((event) => (
+                <CarouselItem
+                  key={event.id}
+                  className="sm:basis-1/2 lg:basis-1/3"
+                >
+                  <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition duration-300">
+                    {/* Workshop Image */}
+                    <div className="relative h-64 w-full overflow-hidden">
+                      <img
+                        src={event.imgUrl}
+                        alt={event.title}
+                        className="h-full w-full object-cover hover:scale-105 transition-transform duration-300"
+                      />
                     </div>
-                    <div className="text-xs font-medium text-gray-800 uppercase flex gap-2">
-                      <MapPin />
 
-                      <div className="mt-0.5"> {event.eventDate} </div>
-                    </div>
-                    <div className="text-xs font-medium text-gray-800 uppercase flex gap-2">
-                      <MapPin />
+                    {/* Workshop Info */}
+                    <CardContent className="p-4 space-y-3">
+                      {/* Header with Title + Delete */}
+                      <div className="flex justify-between items-start">
+                        <h3 className="text-lg font-semibold line-clamp-2">
+                          {event.title}
+                        </h3>
 
-                      <div className="mt-0.5"> {event.eventTime} </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="left-[-48px]" />
-          <CarouselNext className="right-[-48px]" />
-        </Carousel>
-      </div>
+                        {/* Delete Dialog */}
+                        <Dialog>
+                          <form>
+                            <DialogTrigger asChild>
+                              <Trash className="text-red-500 cursor-pointer" />
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-[400px]">
+                              <DialogHeader>
+                                <DialogTitle>Confirm Delete</DialogTitle>
+                                <DialogDescription className="text-gray-800">
+                                  Only Founder, Marketing, or Engineering admin
+                                  can delete this event.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <DialogFooter className="flex justify-end gap-2">
+                                <DialogClose asChild>
+                                  <Button
+                                    className="bg-[#4169E1] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
+                     shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
+                     transition-all hover:bg-blue-800 hover:text-white "
+                                  >
+                                    Cancel
+                                  </Button>
+                                </DialogClose>
+                                <Button
+                                  onClick={() => deleteEvent(event.id)}
+                                  className="bg-[#ec2222] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
+                     shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
+                     transition-all hover:bg-red-600 hover:text-white "
+                                >
+                                  Delete
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </form>
+                        </Dialog>
+                      </div>
+
+                      {/* Workshop Details */}
+                      <div className="flex flex-col gap-2 text-sm text-gray-600">
+                        <div className="flex items-center gap-2">
+                          <MapPin className="w-4 h-4 text-gray-500" />
+                          <span>{event.location}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-gray-500" />
+                          <span>
+                            {" "}
+                            {event.eventDate
+                              ? new Date(event.eventDate).toLocaleDateString()
+                              : ""}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-gray-500" />
+                          <span>{event.eventTime}</span>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+
+            {/* Carousel Arrows */}
+            <CarouselPrevious className="-left-10" />
+            <CarouselNext className="-right-10" />
+          </Carousel>
+        </section>
+        {/* You can repeat same structure for Projects / Workshops / Events */}
+      </main>
     </div>
   );
 };

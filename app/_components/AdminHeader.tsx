@@ -7,7 +7,6 @@ import { UserRoundPlus } from "lucide-react";
 import { FilePlusCorner } from "lucide-react";
 import { Projector } from "lucide-react";
 import { User } from "lucide-react";
-
 import {
   Home,
   PenSquare,
@@ -177,6 +176,13 @@ export default function AdminHeader() {
             icon={UserRoundPlus}
             label="Add Member"
             path="/create-admin"
+            router={router}
+            setOpen={setOpen}
+          />
+          <NavItem
+            icon={User}
+            label="Profile"
+            path="/profile"
             router={router}
             setOpen={setOpen}
           />

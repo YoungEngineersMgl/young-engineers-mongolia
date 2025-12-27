@@ -146,7 +146,6 @@ export async function PUT(req: Request) {
     if (!blogId)
       return NextResponse.json({ error: "Missing id" }, { status: 401 });
 
-    // Role check
     if (decoded.role !== "RESEARCH" && decoded.role !== "FOUNDER") {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
@@ -155,7 +154,6 @@ export async function PUT(req: Request) {
     if (!admin)
       return NextResponse.json({ error: "Admin not found" }, { status: 404 });
 
-    // Build update object dynamically
     const dataToUpdate: {
       title?: string;
       imgUrl?: string;
@@ -186,9 +184,6 @@ export async function PUT(req: Request) {
 
     return NextResponse.json(updateBlog, { status: 200 });
   } catch (err) {
-    return NextResponse.json(
-      { error: (err as Error).message },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: err }, { status: 500 });
   }
 }

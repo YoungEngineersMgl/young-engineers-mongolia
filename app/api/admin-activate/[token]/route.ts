@@ -1,15 +1,7 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
-import crypto from "crypto";
-import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 
-type JwtAdminPayload = {
-  id: string;
-  inviteToken: string;
-  role: "FOUNDER" | "RESEARCH" | "ENGINEERING" | "MARKETING";
-  status: "ACTIVE" | "PENDING";
-};
+import bcrypt from "bcrypt";
 
 export async function POST(
   req: Request,

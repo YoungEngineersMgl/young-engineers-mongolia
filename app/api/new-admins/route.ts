@@ -84,3 +84,33 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: err }, { status: 400 });
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return NextResponse.json({ error: "Missing token" }, { status: 401 });
+    }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET!
+    ) as JwtAdminPayload;
+
+    const isFounder = decoded.role === "FOUNDER";
+
+    if (decoded.status !== "ACTIVE") {
+      return NextResponse.json({ error: "Invalid User" }, { status: 404 });
+    }
+
+    if (!isFounder) {
+      return NextResponse.json({ error: "Error" }, { status: 403 });
+    }
+
+    if (isFounder) {
+      const admins = await prisma.admin.findMany();
+
+      return NextResponse.json(admins, { status: 200 });
+    }
+  } catch (err) {}
+}

@@ -321,10 +321,10 @@ const Page = () => {
               {blogs.map((blog) => (
                 <CarouselItem
                   key={blog.id}
-                  className="sm:basis-1/2 lg:basis-1/3"
+                  className="basis-4/5 sm:basis-1/2 lg:basis-1/3"
                 >
                   <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition duration-300">
-                    <div className="relative h-64 w-full overflow-hidden">
+                    <div className="relative h-40 sm:h-48 lg:h-64 w-full overflow-hidden">
                       <img
                         src={blog.imgUrl}
                         alt={blog.title}
@@ -346,7 +346,7 @@ const Page = () => {
                                 <DialogHeader>
                                   <DialogTitle>Confirm Delete</DialogTitle>
                                   <DialogDescription className="text-gray-800">
-                                    Only Founder or Research admin can delete
+                                    Only Founder or Research admins can delete
                                     this blog.
                                   </DialogDescription>
                                 </DialogHeader>
@@ -384,8 +384,8 @@ const Page = () => {
                                     Edit Blog
                                   </DialogTitle>
                                   <DialogDescription className="text-gray-800">
-                                    Only Founder or Research admin can edit this
-                                    blog.
+                                    Only Founder or Research admins can edit
+                                    this blog.
                                   </DialogDescription>
                                 </DialogHeader>
                                 <div className="grid gap-3 mt-2">
@@ -484,7 +484,6 @@ const Page = () => {
                                     name="newPublishedDate"
                                   />
 
-                                  {/* IMAGE UPLOAD */}
                                   <div className="flex flex-col gap-2">
                                     {imageUrl ? (
                                       <div className="relative w-full h-48">
@@ -567,8 +566,8 @@ const Page = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="-left-10" />
-            <CarouselNext className="-right-10" />
+            <CarouselPrevious className="hidden sm:flex -left-10" />
+            <CarouselNext className="hidden sm:flex -right-10" />
           </Carousel>
         </section>
         <section>
@@ -601,12 +600,10 @@ const Page = () => {
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-[425px]">
                               <DialogHeader>
-                                <DialogTitle>
-                                  Do you really want to delete this project?
-                                </DialogTitle>
+                                <DialogTitle>Confirm Delete</DialogTitle>
                                 <DialogDescription className="text-gray-800">
-                                  Zovhon Founder , Marketing, Engineering admin
-                                  users delete hiij chadna.
+                                  Only Founder, Marketing, or Engineering admins
+                                  can delete this project.
                                 </DialogDescription>
                               </DialogHeader>
                               <div className="grid gap-4"></div>
@@ -638,8 +635,8 @@ const Page = () => {
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPrevious className="-left-10" />
-            <CarouselNext className="-right-10" />
+            <CarouselPrevious className="hidden sm:flex -left-10" />
+            <CarouselNext className="hidden sm:flex -right-10" />
           </Carousel>
         </section>
         <section>
@@ -649,10 +646,10 @@ const Page = () => {
               {workshops.map((workshop) => (
                 <CarouselItem
                   key={workshop.id}
-                  className="sm:basis-1/2 lg:basis-1/3"
+                  className="basis-4/5 sm:basis-1/2 lg:basis-1/3"
                 >
                   <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition duration-300">
-                    <div className="relative h-64 w-full overflow-hidden">
+                    <div className="relative h-40 sm:h-48 lg:h-64 w-full overflow-hidden">
                       <img
                         src={workshop.imgUrl}
                         alt={workshop.title}
@@ -660,15 +657,12 @@ const Page = () => {
                       />
                     </div>
 
-                    {/* Workshop Info */}
                     <CardContent className="p-4 space-y-3">
-                      {/* Header with Title + Delete */}
                       <div className="flex justify-between items-start">
                         <h3 className="text-lg font-semibold line-clamp-2">
                           {workshop.title}
                         </h3>
 
-                        {/* Delete Dialog */}
                         <Dialog>
                           <form>
                             <DialogTrigger asChild>
@@ -678,7 +672,7 @@ const Page = () => {
                               <DialogHeader>
                                 <DialogTitle>Confirm Delete</DialogTitle>
                                 <DialogDescription className="text-gray-800">
-                                  Only Founder, Marketing, or Engineering admin
+                                  Only Founder, Marketing, or Engineering admins
                                   can delete this workshop.
                                 </DialogDescription>
                               </DialogHeader>
@@ -734,9 +728,8 @@ const Page = () => {
               ))}
             </CarouselContent>
 
-            {/* Carousel Arrows */}
-            <CarouselPrevious className="-left-10" />
-            <CarouselNext className="-right-10" />
+            <CarouselPrevious className="hidden sm:flex -left-10" />
+            <CarouselNext className="hidden sm:flex -right-10" />
           </Carousel>
         </section>
         <section>
@@ -746,11 +739,10 @@ const Page = () => {
               {events.map((event) => (
                 <CarouselItem
                   key={event.id}
-                  className="sm:basis-1/2 lg:basis-1/3"
+                  className="basis-4/5 sm:basis-1/2 lg:basis-1/3"
                 >
                   <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition duration-300">
-                    {/* Workshop Image */}
-                    <div className="relative h-64 w-full overflow-hidden">
+                    <div className="relative h-40 sm:h-48 lg:h-64 w-full overflow-hidden">
                       <img
                         src={event.imgUrl}
                         alt={event.title}
@@ -758,15 +750,12 @@ const Page = () => {
                       />
                     </div>
 
-                    {/* Workshop Info */}
                     <CardContent className="p-4 space-y-3">
-                      {/* Header with Title + Delete */}
                       <div className="flex justify-between items-start">
                         <h3 className="text-lg font-semibold line-clamp-2">
                           {event.title}
                         </h3>
 
-                        {/* Delete Dialog */}
                         <Dialog>
                           <form>
                             <DialogTrigger asChild>
@@ -776,7 +765,7 @@ const Page = () => {
                               <DialogHeader>
                                 <DialogTitle>Confirm Delete</DialogTitle>
                                 <DialogDescription className="text-gray-800">
-                                  Only Founder, Marketing, or Engineering admin
+                                  Only Founder, Marketing, or Engineering admins
                                   can delete this event.
                                 </DialogDescription>
                               </DialogHeader>
@@ -831,8 +820,8 @@ const Page = () => {
             </CarouselContent>
 
             {/* Carousel Arrows */}
-            <CarouselPrevious className="-left-10" />
-            <CarouselNext className="-right-10" />
+            <CarouselPrevious className="hidden sm:flex -left-10" />
+            <CarouselNext className="hidden sm:flex -right-10" />
           </Carousel>
         </section>
         {/* You can repeat same structure for Projects / Workshops / Events */}

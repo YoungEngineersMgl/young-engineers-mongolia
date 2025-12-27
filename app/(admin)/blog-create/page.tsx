@@ -169,7 +169,7 @@ const Page = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-slate-100 mt-10">
       <AdminHeader />
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-6 flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
@@ -271,7 +271,6 @@ const Page = () => {
             </CardContent>
           </Card>
 
-          {/* Closing Note */}
           <div className="text-lg font-medium text-gray-700 mt-5">
             Closing Note <span className="text-red-500">*</span>
           </div>
@@ -294,7 +293,6 @@ const Page = () => {
             className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
           />
 
-          {/* Category */}
           <div className="text-lg font-medium text-gray-700 mt-3">
             Category <span className="text-red-500">*</span>
           </div>

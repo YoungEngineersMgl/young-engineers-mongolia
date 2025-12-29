@@ -99,7 +99,7 @@ const Page = () => {
           value={inputValues.title}
           name="title"
           onChange={handleInputs}
-          className="mb-4 bg-white"
+          className="mb-4 bg-white mt-2"
         />
         <div className="text-lg font-medium text-gray-700">
           Project Content <span className="text-red-500">*</span>

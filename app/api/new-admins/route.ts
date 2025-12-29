@@ -114,3 +114,31 @@ export async function GET(req: Request) {
     }
   } catch (err) {}
 }
+
+export async function DELETE(req: Request) {
+  try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return NextResponse.json({ error: "Missing token" }, { status: 401 });
+    }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET!
+    ) as JwtAdminPayload;
+    if (decoded.role !== "FOUNDER") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    const body = await req.json();
+    const { id } = body;
+    const deleteAdmin = await prisma.admin.delete({
+      where: { id },
+    });
+    return NextResponse.json(
+      { message: "Successfully deleted" },
+      { status: 200 }
+    );
+  } catch (err) {
+    return NextResponse.json({ error: err }, { status: 500 });
+  }
+}

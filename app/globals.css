@@ -115,6 +115,27 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+@layer utilities {
+  .text-glow-dark-blue {
+    text-shadow: 0 0 10px rgba(118, 160, 228, 0.8),
+      0 0 20px rgba(30, 111, 243, 0.6), 0 0 40px rgba(4, 27, 68, 0.4);
+  }
+
+  .text-glow-blue {
+    text-shadow: 0 0 10px rgba(59, 130, 246, 0.8),
+      0 0 20px rgba(59, 130, 246, 0.6), 0 0 40px rgba(59, 130, 246, 0.4);
+  }
+
+  .text-glow-white {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8),
+      0 0 20px rgba(240, 240, 240, 0.967), 0 0 40px rgba(246, 248, 250, 0.967);
+  }
+
+  .bit-white-glow {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.44),
+      0 0 20px rgba(245, 231, 231, 0.702), 0 0 40px rgba(246, 248, 250, 0.577);
+  }
+}
 @layer base {
   * {
     @apply border-border outline-ring/50;

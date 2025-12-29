@@ -68,7 +68,7 @@ export default function AdminHeader() {
           onClick={() => router.push("/dashboard")}
           className="flex items-center gap-2 cursor-pointer"
         >
-          <img src="logo.png" className="h-14 w-auto" />
+          <img src="logo.png" className="h-16 w-auto" />
         </div>
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">

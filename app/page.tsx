@@ -50,8 +50,6 @@ const NavItem = ({
       onClick={() => {
         if (onClick) onClick();
         else if (path) router.push(path);
-
-        setOpen(false);
       }}
       className="flex items-center gap-2 text-white hover:text-gray-400 transition bit-white-glow"
     >

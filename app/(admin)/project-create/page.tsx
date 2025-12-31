@@ -72,7 +72,7 @@ const Page = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-slate-100 mt-10">
       <AdminHeader />
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-6 flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
@@ -99,7 +99,7 @@ const Page = () => {
           value={inputValues.title}
           name="title"
           onChange={handleInputs}
-          className="mb-4 bg-white"
+          className="mb-4 bg-white mt-2"
         />
         <div className="text-lg font-medium text-gray-700">
           Project Content <span className="text-red-500">*</span>

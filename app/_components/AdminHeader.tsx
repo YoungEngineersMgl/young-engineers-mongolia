@@ -6,7 +6,7 @@ import { LogOut } from "lucide-react";
 import { UserRoundPlus } from "lucide-react";
 import { FilePlusCorner } from "lucide-react";
 import { Projector } from "lucide-react";
-
+import { User } from "lucide-react";
 import {
   Home,
   PenSquare,
@@ -62,13 +62,13 @@ export default function AdminHeader() {
   };
 
   return (
-    <header className="w-full border-b bg-white">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6">
+    <header className="fixed top-0 left-0 right-0 z-50  w-full border-b bg-white">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6 ">
         <div
           onClick={() => router.push("/dashboard")}
           className="flex items-center gap-2 cursor-pointer"
         >
-          <img src="logo.png" className="h-14 w-auto" />
+          <img src="logo.png" className="h-16 w-auto" />
         </div>
 
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
@@ -111,6 +111,13 @@ export default function AdminHeader() {
             icon={UserRoundPlus}
             label="Add Member"
             path="/create-admin"
+            router={router}
+            setOpen={setOpen}
+          />
+          <NavItem
+            icon={User}
+            label="Profile"
+            path="/profile"
             router={router}
             setOpen={setOpen}
           />
@@ -169,6 +176,13 @@ export default function AdminHeader() {
             icon={UserRoundPlus}
             label="Add Member"
             path="/create-admin"
+            router={router}
+            setOpen={setOpen}
+          />
+          <NavItem
+            icon={User}
+            label="Profile"
+            path="/profile"
             router={router}
             setOpen={setOpen}
           />

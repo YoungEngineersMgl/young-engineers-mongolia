@@ -77,9 +77,9 @@ model Blog {
   publishedDate DateTime
   content       Content[]
   researchId    String?
-  researchAdmin Admin?    @relation("researchAdmin", fields: [researchId], references: [id])
+  researchAdmin Admin?    @relation("researchAdmin", fields: [researchId], references: [id], onDelete: SetNull)
   adminId       String?
-  admin         Admin?    @relation("admin", fields: [adminId], references: [id])
+  admin         Admin?    @relation("admin", fields: [adminId], references: [id], onDelete: SetNull)
   category      Category
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
@@ -102,11 +102,11 @@ model Project {
   content          String
   imgUrl           String
   marketingId      String?
-  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id])
+  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id], onDelete: SetNull)
   engineeringId    String?
-  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id])
+  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id], onDelete: SetNull)
   adminId          String?
-  admin            Admin?   @relation("admin", fields: [adminId], references: [id])
+  admin            Admin?   @relation("admin", fields: [adminId], references: [id], onDelete: SetNull)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
@@ -121,11 +121,11 @@ model Event {
   location         String
   registerUrl      String?
   engineeringId    String?
-  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id])
+  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id], onDelete: SetNull)
   marketingId      String?
-  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id])
+  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id], onDelete: SetNull)
   adminId          String?
-  admin            Admin?   @relation("admin", fields: [adminId], references: [id])
+  admin            Admin?   @relation("admin", fields: [adminId], references: [id], onDelete: SetNull)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
@@ -141,10 +141,10 @@ model Workshop {
   registerUrl      String?
   marketingId      String?
   engineeringId    String?
-  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id])
+  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id], onDelete: SetNull)
   adminId          String?
-  admin            Admin?   @relation("admin", fields: [adminId], references: [id])
-  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id])
+  admin            Admin?   @relation("admin", fields: [adminId], references: [id], onDelete: SetNull)
+  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id], onDelete: SetNull)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }

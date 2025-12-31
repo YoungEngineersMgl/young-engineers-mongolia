@@ -84,3 +84,61 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: err }, { status: 400 });
   }
 }
+
+export async function GET(req: Request) {
+  try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return NextResponse.json({ error: "Missing token" }, { status: 401 });
+    }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET!
+    ) as JwtAdminPayload;
+
+    const isFounder = decoded.role === "FOUNDER";
+
+    if (decoded.status !== "ACTIVE") {
+      return NextResponse.json({ error: "Invalid User" }, { status: 404 });
+    }
+
+    if (!isFounder) {
+      return NextResponse.json({ error: "Error" }, { status: 403 });
+    }
+
+    if (isFounder) {
+      const admins = await prisma.admin.findMany();
+
+      return NextResponse.json(admins, { status: 200 });
+    }
+  } catch (err) {}
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return NextResponse.json({ error: "Missing token" }, { status: 401 });
+    }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET!
+    ) as JwtAdminPayload;
+    if (decoded.role !== "FOUNDER") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+    const body = await req.json();
+    const { id } = body;
+    const deleteAdmin = await prisma.admin.delete({
+      where: { id },
+    });
+    return NextResponse.json(
+      { message: "Successfully deleted" },
+      { status: 200 }
+    );
+  } catch (err) {
+    return NextResponse.json({ error: err }, { status: 500 });
+  }
+}

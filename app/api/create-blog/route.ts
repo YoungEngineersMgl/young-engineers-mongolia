@@ -51,11 +51,16 @@ export async function POST(req: Request) {
             intro,
             imgUrl,
             closingNote,
-            researchId: decoded.id,
             category,
-            publishedDate: new Date(body.publishedDate),
+            publishedDate,
+            researchAdmin: {
+              connect: {
+                id: decoded.id,
+              },
+            },
           },
         });
+
         return NextResponse.json(createBlog, { status: 200 });
       }
     }
@@ -72,9 +77,14 @@ export async function POST(req: Request) {
             intro,
             imgUrl,
             closingNote,
-            adminId: decoded.id,
             category,
-            publishedDate,
+            publishedDate: publishedDate,
+
+            admin: {
+              connect: {
+                id: decoded.id,
+              },
+            },
           },
         });
 
@@ -83,5 +93,97 @@ export async function POST(req: Request) {
     }
   } catch (err) {
     return NextResponse.json(err, { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  try {
+    const { blogId } = await req.json();
+    const deleteContents = await prisma.content.deleteMany({
+      where: { blogId },
+    });
+
+    const deleteBlog = await prisma.blog.delete({
+      where: { id: blogId },
+    });
+
+    return NextResponse.json(
+      { message: "successfully deleted" },
+      { status: 200 }
+    );
+  } catch (err) {
+    return NextResponse.json(err, { status: 500 });
+  }
+}
+
+export enum Category {
+  SOFTWARE = "SOFTWARE",
+  MECHANICAL = "MECHANICAL",
+  NANO = "NANO",
+  ENVIRONMENTAL = "ENVIRONMENTAL",
+  ELECTRICAL = "ELECTRICAL",
+  AEROSPACE = "AEROSPACE",
+  CIVIL = "CIVIL",
+  CHEMICAL = "CHEMICAL",
+  BIOMEDICAL = "BIOMEDICAL",
+}
+
+export async function PUT(req: Request) {
+  try {
+    const body = await req.json();
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return NextResponse.json({ error: "Missing token" }, { status: 401 });
+    }
+    const token = authHeader.split(" ")[1];
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET!
+    ) as JwtAdminPayload;
+
+    const { blogId, newTitle, newImgUrl, newCategory, newPublishedDate } = body;
+
+    if (!blogId)
+      return NextResponse.json({ error: "Missing id" }, { status: 401 });
+
+    if (decoded.role !== "RESEARCH" && decoded.role !== "FOUNDER") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
+    }
+
+    const admin = await prisma.admin.findUnique({ where: { id: decoded.id } });
+    if (!admin)
+      return NextResponse.json({ error: "Admin not found" }, { status: 404 });
+
+    const dataToUpdate: {
+      title?: string;
+      imgUrl?: string;
+      category?: Category;
+      publishedDate?: Date;
+    } = {};
+
+    if (typeof newTitle === "string") dataToUpdate.title = newTitle;
+    if (typeof newImgUrl === "string") dataToUpdate.imgUrl = newImgUrl;
+
+    if (typeof newCategory === "string") {
+      if (Object.values(Category).includes(newCategory as Category)) {
+        dataToUpdate.category = newCategory as Category;
+      } else {
+        return NextResponse.json(
+          { error: "Invalid category" },
+          { status: 400 }
+        );
+      }
+    }
+    if (newPublishedDate)
+      dataToUpdate.publishedDate = new Date(newPublishedDate);
+
+    const updateBlog = await prisma.blog.update({
+      where: { id: blogId },
+      data: dataToUpdate,
+    });
+
+    return NextResponse.json(updateBlog, { status: 200 });
+  } catch (err) {
+    return NextResponse.json({ error: err }, { status: 500 });
   }
 }

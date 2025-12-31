@@ -65,6 +65,7 @@ const Page = () => {
 
   const [open, setOpen] = useState(false);
 
+  const [blogs , setBlogs] = useState<[]>([]);
   return (
     <div>
       <section className="min-h-screen w-full bg-[url('/pro3.jpg')] bg-cover bg-center">

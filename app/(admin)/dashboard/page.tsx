@@ -297,7 +297,6 @@ const Page = () => {
     }
   };
 
-  console.log(projects);
   useEffect(() => {
     if (!token) return;
 
@@ -342,7 +341,7 @@ const Page = () => {
                               <DialogTrigger asChild>
                                 <Trash className="text-red-500 cursor-pointer" />
                               </DialogTrigger>
-                              <DialogContent className="sm:max-w-[400px]">
+                              <DialogContent className="sm:max-w-100">
                                 <DialogHeader>
                                   <DialogTitle>Confirm Delete</DialogTitle>
                                   <DialogDescription className="text-gray-800">
@@ -378,7 +377,7 @@ const Page = () => {
                               <DialogTrigger asChild>
                                 <PenLine className="text-gray-700 cursor-pointer" />
                               </DialogTrigger>
-                              <DialogContent className="sm:max-w-[425px]">
+                              <DialogContent className="sm:max-w-106.25">
                                 <DialogHeader>
                                   <DialogTitle className="text-center">
                                     Edit Blog
@@ -598,7 +597,7 @@ const Page = () => {
                             <DialogTrigger asChild className="text-red-500">
                               <Trash />
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-[425px]">
+                            <DialogContent className="sm:max-w-106.25">
                               <DialogHeader>
                                 <DialogTitle>Confirm Delete</DialogTitle>
                                 <DialogDescription className="text-gray-800">
@@ -668,7 +667,7 @@ const Page = () => {
                             <DialogTrigger asChild>
                               <Trash className="text-red-500 cursor-pointer" />
                             </DialogTrigger>
-                            <DialogContent className="sm:max-w-[400px]">
+                            <DialogContent className="sm:max-w-100">
                               <DialogHeader>
                                 <DialogTitle>Confirm Delete</DialogTitle>
                                 <DialogDescription className="text-gray-800">

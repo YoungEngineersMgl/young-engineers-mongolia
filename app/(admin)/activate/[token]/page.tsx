@@ -15,6 +15,7 @@ import {
 import { Mail, Lock } from "lucide-react";
 import { toast } from "sonner";
 
+
 const Page = () => {
   const [inputValues, setInputValues] = useState({
     email: "",
@@ -68,7 +69,6 @@ const Page = () => {
             account
           </CardDescription>
         </CardHeader>
-
         <CardContent className="space-y-4">
           <div className="relative">
             <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -93,7 +93,55 @@ const Page = () => {
               className="pl-10"
             />
           </div>
-
+          <div>
+            <ul className="text-sm text-gray-500">
+              <li
+                className={
+                  inputValues.newPassword.length >= 8
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+              >
+                • Хамгийн багадаа 8 тэмдэг
+              </li>
+              <li
+                className={
+                  /[A-Z]/.test(inputValues.newPassword)
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+              >
+                • Том үсэг агуулсан
+              </li>
+              <li
+                className={
+                  /[a-z]/.test(inputValues.newPassword)
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+              >
+                • Жижиг үсэг агуулсан
+              </li>
+              <li
+                className={
+                  /[0-9]/.test(inputValues.newPassword)
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+              >
+                • Тоо агуулсан
+              </li>
+              <li
+                className={
+                  /[!@#$%^&*(),.?":{}|<>]/.test(inputValues.newPassword)
+                    ? "text-green-600"
+                    : "text-red-600"
+                }
+              >
+                • Тусгай тэмдэг агуулсан
+              </li>
+            </ul>
+          </div>
           <div className="relative">
             <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
@@ -107,6 +155,11 @@ const Page = () => {
           </div>
         </CardContent>
 
+        {inputValues.confirmPassword === inputValues.newPassword ? (
+          <p className="text-green-600 ml-7">Нууц үг таарч байна.</p>
+        ) : (
+          <p className="text-red-600 ml-7">Нууц үг таарахгүй байна.</p>
+        )}
         <CardFooter>
           <Button className="w-full" onClick={adminActivate}>
             Activate Account

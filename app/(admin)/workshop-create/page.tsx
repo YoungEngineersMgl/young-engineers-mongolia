@@ -8,6 +8,7 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { upload } from "@vercel/blob/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 
 const Page = () => {
@@ -15,7 +16,7 @@ const Page = () => {
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [uploading, setUploading] = useState(false);
-
+  const [loading, setLoading] = useState(false);
   const [inputValues, setInputValues] = useState({
     title: "",
     content: "",
@@ -59,6 +60,8 @@ const Page = () => {
   };
 
   const createWorkshop = async () => {
+    if (loading) return;
+    setLoading(true);
     const response = await fetch("/api/create-workshop", {
       method: "POST",
       headers: {
@@ -85,6 +88,7 @@ const Page = () => {
         registerUrl: "",
         location: "",
       });
+      setLoading(false);
 
       removeImg();
     } else if (!response.ok) {
@@ -277,13 +281,14 @@ const Page = () => {
             !imageUrl ||
             !inputValues.workshopDate ||
             !inputValues.workshopTime ||
-            !inputValues.location
+            !inputValues.location ||
+            loading
           }
           className="bg-[#4169E1] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
                      shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
                      transition-all hover:bg-blue-800 hover:text-white mt-10"
         >
-          Create Workshop
+          {loading ? "Creating workshop..." : "Create Workshop"}
         </Button>
       </div>
     </div>

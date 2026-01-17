@@ -27,6 +27,7 @@ const Page = () => {
     newEmail: "",
     newPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleInputs = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -35,30 +36,43 @@ const Page = () => {
 
   const updateProfile = async () => {
     if (!token) return;
+    if (loading) return;
+
     if (!inputValues.newEmail && !inputValues.newPassword) {
       toast.error("Please enter a new email or password.");
       return;
     }
 
-    const response = await fetch("/api/update-admin", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        email: inputValues.newEmail || admin?.email,
-        password: inputValues.newPassword,
-      }),
-    });
+    setLoading(true);
+    try {
+      const response = await fetch("/api/update-admin", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: inputValues.newEmail || admin?.email,
+          password: inputValues.newPassword,
+        }),
+      });
 
-    if (response.ok) {
+      if (!response.ok) {
+        const data = await response.json();
+        toast.error(data?.error || "Update failed");
+      }
+
       const { token: newToken, admin: updatedAdmin } = await response.json();
       localStorage.setItem("token", newToken);
       setToken(newToken);
       setAdmin(updatedAdmin);
+
       toast.success("Your account has been successfully updated!");
       setInputValues({ newEmail: "", newPassword: "" });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -105,16 +119,68 @@ const Page = () => {
                   onChange={handleInputs}
                 />
               </div>
+              <div>
+                <ul className="text-sm text-gray-500">
+                  <li
+                    className={
+                      inputValues.newPassword.length >= 8
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }
+                  >
+                    • Хамгийн багадаа 8 тэмдэг
+                  </li>
+                  <li
+                    className={
+                      /[A-Z]/.test(inputValues.newPassword)
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }
+                  >
+                    • Том үсэг агуулсан
+                  </li>
+                  <li
+                    className={
+                      /[a-z]/.test(inputValues.newPassword)
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }
+                  >
+                    • Жижиг үсэг агуулсан
+                  </li>
+                  <li
+                    className={
+                      /[0-9]/.test(inputValues.newPassword)
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }
+                  >
+                    • Тоо агуулсан
+                  </li>
+                  <li
+                    className={
+                      /[!@#$%^&*(),.?":{}|<>]/.test(inputValues.newPassword)
+                        ? "text-green-600"
+                        : "text-red-600"
+                    }
+                  >
+                    • Тусгай тэмдэг агуулсан
+                  </li>
+                </ul>
+              </div>
             </form>
           </CardContent>
           <CardFooter className="flex justify-end">
             <Button
               onClick={updateProfile}
+              disabled={
+                loading || (!inputValues.newEmail && !inputValues.newPassword)
+              }
               className="bg-[#4169E1] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
                      shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
                      transition-all hover:bg-blue-800 hover:text-white w-auto"
             >
-              Update Profile
+              {loading ? "Updating profile..." : "Update Profile"}
             </Button>
           </CardFooter>
         </Card>

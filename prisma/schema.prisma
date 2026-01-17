@@ -83,6 +83,7 @@ model Blog {
   category      Category
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  comments Comments[]
 }
 
 model Content {
@@ -147,4 +148,14 @@ model Workshop {
   marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id], onDelete: SetNull)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+}
+
+
+model Comments {
+  id String @id @default(nanoid())
+  blogId String
+  blog Blog @relation(fields:[blogId], references : [id])
+ name String @default("Зочин")
+  comment String
+  createdAt        DateTime @default(now())
 }

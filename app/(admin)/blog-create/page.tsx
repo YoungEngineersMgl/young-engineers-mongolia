@@ -13,7 +13,7 @@ import {
   UploadCloud,
   X,
 } from "lucide-react";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { upload } from "@vercel/blob/client";
 import { toast } from "sonner";
 import {
@@ -31,12 +31,15 @@ type Blog = {
 
 const Page = () => {
   const { admin, token } = useAdminAuth();
+
   const [imgFile, setImgFile] = useState<File | null>(null);
   const [imgContentFile, setContentImgFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState("");
   const [contentimgUrl, setContentimgUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [contentUpload, setContentUpload] = useState(false);
   const [blog, setBlog] = useState<Blog | null>(null);
+  const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState<
     | "SOFTWARE"
     | "NANO"
@@ -118,6 +121,8 @@ const Page = () => {
   );
 
   const createBlog = async () => {
+    if (loading) return;
+    setLoading(true);
     const response = await fetch(`/api/create-blog`, {
       method: "POST",
       headers: {
@@ -138,14 +143,17 @@ const Page = () => {
       toast.success("Blog created successfully!");
       const data = await response.json();
       setBlog(data);
+      setLoading(false);
     } else {
-      toast.error("Failed to create blog. Please try again.");
+      const data = await response.json();
+
+      toast.error(data.error);
     }
   };
 
-  console.log(inputValues.publishedDate);
-  console.log(publishedDatePrisma);
   const createBlogContent = async () => {
+    if (contentUpload) return;
+    setContentUpload(true);
     const response = await fetch("/api/create-blog-content", {
       method: "POST",
       headers: {
@@ -161,11 +169,13 @@ const Page = () => {
       }),
     });
 
-    if (response.ok) {
-      toast.success("Blog content added successfully!");
-    } else {
-      toast.error("Failed to add content. Please try again.");
+    if (!response.ok) {
+      const data = await response.json();
+      toast.error(data.error);
     }
+
+    toast.success("Blog content added successfully!");
+    setContentUpload(false);
   };
 
   return (
@@ -346,17 +356,17 @@ const Page = () => {
               !inputValues.title ||
               !inputValues.intro ||
               !inputValues.closingNote ||
-              !imageUrl
+              !imageUrl ||
+              loading
             }
             className="bg-[#4169E1] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
                      shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
                      transition-all hover:bg-blue-800 hover:text-white w-auto mt-5"
           >
-            Create Blog
+            {loading ? "Creating blog..." : "Create Blog"}
           </Button>
         </div>
 
-        {/* Blog Content */}
         <div className="mt-10">
           <div className="text-2xl font-bold text-gray-700">Blog Content</div>
 
@@ -382,7 +392,7 @@ const Page = () => {
             className="w-full rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white mt-2"
           />
 
-          {/* Content Image */}
+        
           <Card className="w-auto shadow-md border border-gray-200 mt-6">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-gray-700">
@@ -442,13 +452,16 @@ const Page = () => {
           <Button
             onClick={createBlogContent}
             disabled={
-              uploading || !inputValues.subTitle || !inputValues.blogContent
+              uploading ||
+              !inputValues.subTitle ||
+              !inputValues.blogContent ||
+              contentUpload
             }
             className="bg-[#4169E1] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
                      shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
                      transition-all hover:bg-blue-800 hover:text-white w-auto mt-6"
           >
-            Add Blog Content
+            {contentUpload ? "Uploading content..." : "Add Blog Content"}
           </Button>
         </div>
       </div>

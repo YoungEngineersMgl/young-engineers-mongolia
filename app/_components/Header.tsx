@@ -48,10 +48,9 @@ const NavItem = ({
       onClick={() => {
         if (onClick) onClick();
         else if (path) router.push(path);
-
         setOpen(false);
       }}
-      className="flex items-center gap-2 text-slate-600 hover:text-gray-800 transition"
+      className="flex items-center gap-2 text-white hover:text-gray-400 transition bit-white-glow"
     >
       <Icon className="h-4 w-4" />
 
@@ -65,19 +64,22 @@ export default function Header() {
 
   const [open, setOpen] = useState(false);
 
-  const { setToken, setAdmin } = useAdminAuth();
-
   return (
-    <header className="fixed top-0 left-0 right-0 z-50  w-full border-b bg-white">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300
+    
+      ${
+        open
+          ? "bg-blue-950 text-white"
+          : "bg-white/10 backdrop-blur-md border-b border-white/20 text-white"
+      }`}
+    >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6 ">
-        <div
-          onClick={() => router.push("/dashboard")}
-          className="flex items-center gap-2 cursor-pointer"
-        >
-          <img src="logo.png" className="h-16 w-auto" />
+        <div className="flex items-center gap-2 ">
+          <img src="/yem-logo.png" className="h-12 w-auto object-contain  " />
         </div>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm font-medium">
+        <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-white">
           <NavItem
             icon={Home}
             label="Home"
@@ -89,7 +91,7 @@ export default function Header() {
           <NavItem
             icon={FileText}
             label="Blogs"
-            path="/blogs"
+            path="/9E-Blogs"
             router={router}
             setOpen={setOpen}
           />
@@ -97,7 +99,7 @@ export default function Header() {
           <NavItem
             icon={CalendarPlus}
             label="Events"
-            path="/events"
+            path="/Events"
             router={router}
             setOpen={setOpen}
           />
@@ -105,7 +107,7 @@ export default function Header() {
           <NavItem
             icon={Projector}
             label="Workshops"
-            path="/workshops"
+            path="/Workshops"
             router={router}
             setOpen={setOpen}
           />
@@ -113,7 +115,7 @@ export default function Header() {
           <NavItem
             icon={Users}
             label="About Us"
-            path="/about-us"
+            path="/About-us"
             router={router}
             setOpen={setOpen}
           />
@@ -125,7 +127,7 @@ export default function Header() {
       </div>
 
       {open && (
-        <div className="md:hidden px-4 py-4 space-y-4">
+        <div className="md:hidden px-4 py-4 space-y-4 bg-blue-950">
           <NavItem
             icon={Home}
             label="Home"
@@ -137,7 +139,7 @@ export default function Header() {
           <NavItem
             icon={PenSquare}
             label="Blogs"
-            path="/blog-create"
+            path="/9E-Blogs"
             router={router}
             setOpen={setOpen}
           />
@@ -145,7 +147,7 @@ export default function Header() {
           <NavItem
             icon={CalendarPlus}
             label="Events"
-            path="/events"
+            path="/Events"
             router={router}
             setOpen={setOpen}
           />
@@ -153,7 +155,7 @@ export default function Header() {
           <NavItem
             icon={Projector}
             label="Workshops"
-            path="/workshops"
+            path="/Workshops"
             router={router}
             setOpen={setOpen}
           />
@@ -161,7 +163,7 @@ export default function Header() {
           <NavItem
             icon={Users}
             label="About Us"
-            path="/about-us"
+            path="/About-us"
             router={router}
             setOpen={setOpen}
           />

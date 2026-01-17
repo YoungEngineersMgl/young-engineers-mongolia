@@ -34,8 +34,8 @@ import { ShieldAlert, UserPlus, ChevronDown } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Mail, Shield, Calendar, Trash2, UserCog } from "lucide-react";
 import { useAdminAuth } from "@/providers/adminAuth";
-import AdminHeader from "@/app/_components/AdminHeader";
 import { toast } from "sonner";
+import AdminHeader from "@/app/_components/AdminHeader";
 
 type Manager = {
   id: string;
@@ -47,12 +47,16 @@ type Manager = {
 const Page = () => {
   const { admin, token } = useAdminAuth();
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const [role, setRole] = useState<
     "FOUNDER" | "RESEARCH" | "ENGINEERING" | "MARKETING" | ""
   >("");
 
   const [managers, setManagers] = useState<Manager[]>([]);
+
   const createNewAdmin = async () => {
+    if (loading) return;
+    setLoading(true);
     const response = await fetch("/api/new-admins", {
       method: "POST",
       headers: {
@@ -62,16 +66,17 @@ const Page = () => {
       body: JSON.stringify({ email, role }),
     });
 
-    if (response.ok) {
-      setEmail("");
-      setRole("");
-      toast.success("Invite email sent successfully");
-      fetchAdmins();
-    } else if (!response.ok) {
+    if (!response.ok) {
       const data = await response.json();
-      toast.error(data.error || "Something went wrong");
-      return;
+      toast.error(data.error);
     }
+
+    setEmail("");
+    setRole("");
+    toast.success("Invite email sent successfully");
+    fetchAdmins();
+
+    setLoading(false);
   };
 
   const deleteAdmin = (id: string) => async () => {
@@ -86,6 +91,9 @@ const Page = () => {
     if (response.ok) {
       toast.success("Admin deleted successfully");
       setManagers((prev) => prev.filter((manager) => manager.id !== id));
+    } else {
+      const data = await response.json();
+      toast.error(data.error);
     }
   };
 
@@ -112,11 +120,9 @@ const Page = () => {
     }
   }, [token]);
 
-  console.log(managers);
   return (
     <div className="min-h-screen bg-slate-100  mt-10">
       <AdminHeader />
-
       <div className="mx-auto max-w-3xl px-4 py-10">
         <div className="mb-6 flex items-start gap-3 rounded-lg border border-blue-200 bg-blue-50 p-4 text-sm text-blue-800">
           <ShieldAlert className="h-7 w-7" />
@@ -208,10 +214,10 @@ const Page = () => {
               className="bg-[#0f51a7] text-white rounded-3xl font-bold text-base sm:text-lg md:text-xl px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-4
                      shadow-[0_4px_0_#27408B] hover:scale-105 hover:shadow-[0_6px_0_#27408B] active:translate-y-1 active:shadow-[0_2px_0_#27408B]
                      transition-all hover:bg-blue-900 hover:text-white"
-              disabled={!isFounder || !email || !role}
+              disabled={!isFounder || !email || !role || loading}
               onClick={createNewAdmin}
             >
-              Create Admin
+              {loading ? "Creating admin..." : "Create Admin"}
             </Button>
           </CardContent>
         </Card>
@@ -231,18 +237,16 @@ const Page = () => {
                 </CardHeader>
 
                 <CardContent className="space-y-3 text-sm">
-                  {/* Role */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-[15px] font-medium">
                       <Shield className="h-6 w-6" />
                       Role
                     </div>
-                    <Badge variant="secondary" className="text-[13px]">
+                    <Badge variant="secondary" className="text-[13px] ">
                       {manager.role}
                     </Badge>
                   </div>
 
-                  {/* Status */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2 text-[15px] font-medium">
                       Status
@@ -251,14 +255,13 @@ const Page = () => {
                       className={
                         manager.status === "ACTIVE"
                           ? "bg-green-100 text-green-700 border border-green-300 text-[13px]"
-                          : "bg-gray-100 text-gray-600 border border-gray-300 text-[13px]"
+                          : "bg-yellow-200 text-gray-600 border border-gray-300 text-[13px]"
                       }
                     >
                       {manager.status}
                     </Badge>
                   </div>
 
-                  {/* Created date */}
                   <div className="flex items-center gap-2 text-gray-800 font-medium">
                     <Calendar className="h-4 w-4" />
                     {new Date(manager.createdAt).toLocaleDateString()}
@@ -277,7 +280,7 @@ const Page = () => {
                         </Button>
                       </div>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="sm:max-w-106.25">
                       <DialogHeader>
                         <DialogTitle>Confirm Delete</DialogTitle>
                         <DialogDescription>
@@ -308,7 +311,6 @@ const Page = () => {
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
-                  {/* Actions */}
                 </CardContent>
               </Card>
             ))}

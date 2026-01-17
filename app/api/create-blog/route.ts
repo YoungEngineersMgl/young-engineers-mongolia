@@ -103,6 +103,11 @@ export async function DELETE(req: Request) {
       where: { blogId },
     });
 
+    const deleteComments = await prisma.comments.deleteMany({
+      where: {
+        blogId,
+      },
+    });
     const deleteBlog = await prisma.blog.delete({
       where: { id: blogId },
     });

@@ -37,7 +37,7 @@ const Page = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-100 to-slate-200 px-4">
       <Card className="w-full max-w-md shadow-xl">
         <CardHeader className="text-center space-y-2">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-900 text-white">
@@ -70,6 +70,7 @@ const Page = () => {
               className="pl-10"
             />
           </div>
+       
         </CardContent>
 
         <CardFooter>

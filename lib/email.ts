@@ -2,20 +2,28 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendInviteEmail(email: string, token: string) {
+export async function sendInviteEmail(
+  email: string,
+  token: string,
+  role: string
+) {
   const inviteLink = `${process.env.APP_URL}/activate/${token}`;
 
   await resend.emails.send({
     from: "onboarding@resend.dev",
     to: email,
-    subject: "Та admin-ээр уригдлаа.",
+    subject: `Admin эрхийн урилга – Аккаунтаа идэвхжүүлнэ үү.`,
     html: `  <p>Сайн байна уу,</p>
-      <p>Та admin-ээр уригдлаа.</p>
+      <p>Танд Young Engineers Mongolia байгууллагын ${role} админ эрхийг олгохоор урьж байна.</p>
+      <p>Доорх холбоосоор орж аккаунтаа идэвхжүүлснээр админ эрх тань хүчин төгөлдөр болно.</p>
       <p>
-        <a href="${inviteLink}">
-          Энд дарж аккаунтаа идэвхжүүлнэ үү
-        </a>
+        Аккаунт идэвхжүүлэх холбоос:
+        ${inviteLink}
       </p>
-      <p>Энэ link 24 цагийн дараа хүчингүй болно.</p>`,
+      <h3>Анхаарна уу:</h3>
+      <p>Энэхүү холбоос нь 24 цагийн дараа автоматаар хүчингүй болох тул хугацаанд нь идэвхжүүлнэ үү.</p>
+      <p>Хүндэтгэсэн,</p>
+     <p> Young Engineers Mongolia</p>
+      `,
   });
 }

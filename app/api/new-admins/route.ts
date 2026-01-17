@@ -77,7 +77,7 @@ export async function POST(req: Request) {
       },
     });
 
-    await sendInviteEmail(email, rawToken);
+    await sendInviteEmail(email, rawToken, role);
 
     return NextResponse.json({ message: "Invite sent" });
   } catch (err) {
@@ -108,7 +108,11 @@ export async function GET(req: Request) {
     }
 
     if (isFounder) {
-      const admins = await prisma.admin.findMany();
+      const admins = await prisma.admin.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
 
       return NextResponse.json(admins, { status: 200 });
     }
@@ -121,19 +125,29 @@ export async function DELETE(req: Request) {
     if (!authHeader) {
       return NextResponse.json({ error: "Missing token" }, { status: 401 });
     }
+
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET!
     ) as JwtAdminPayload;
+
     if (decoded.role !== "FOUNDER") {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
     const body = await req.json();
     const { id } = body;
+
+    if (decoded.id === id) {
+      return NextResponse.json(
+        { error: "You cannot delete your own account." },
+        { status: 404 }
+      );
+    }
     const deleteAdmin = await prisma.admin.delete({
       where: { id },
     });
+
     return NextResponse.json(
       { message: "Successfully deleted" },
       { status: 200 }

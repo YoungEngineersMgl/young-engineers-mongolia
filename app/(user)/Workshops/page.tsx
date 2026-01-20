@@ -28,7 +28,8 @@ import { useRouter } from "next/navigation";
 type Workshop = {
   id: string;
   workshopDate: string;
-  workshopTime: string;
+  workshopStartTime: string;
+  workshopEndTime: string;
   imgUrl: string;
   title: string;
   location: string;
@@ -44,6 +45,11 @@ const Page = () => {
       setWorkshops(data);
     }
   };
+  const formatTime = (iso: string) =>
+    new Date(iso).toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   useEffect(() => {
     fetchWorkshops();
@@ -103,7 +109,7 @@ const Page = () => {
                     key={workshop.id}
                     className="basis-full sm:basis-1/2 lg:basis-1/3"
                   >
-                    <Card className="relative h-[350px] overflow-hidden text-white cursor-pointer  hover:shadow-2xl shadow-white mb-12">
+                    <Card className="relative h-87.5 overflow-hidden text-white cursor-pointer  hover:shadow-2xl shadow-white mb-20 ml-4">
                       <img
                         src={workshop.imgUrl}
                         alt={workshop.title}
@@ -129,7 +135,11 @@ const Page = () => {
 
                           <div className="flex gap-2 pt-2">
                             <CalendarClock />
-                            {workshop.workshopTime}
+                            <span>
+                              {" "}
+                              {formatTime(workshop.workshopStartTime)}–
+                              {formatTime(workshop.workshopEndTime)}
+                            </span>
                           </div>
 
                           <div className="flex gap-2 text-white pt-2">
@@ -172,6 +182,7 @@ const Page = () => {
                 font-bold
                 text-center
                 mb-8
+            
                 tracking-tight
                 bit-white-glow"
         >
@@ -193,7 +204,7 @@ const Page = () => {
                     key={workshop.id}
                     className="basis-full sm:basis-1/2 lg:basis-1/3 px-2"
                   >
-                    <Card className="relative h-[350px] overflow-hidden text-white cursor-pointer  hover:shadow-2xl shadow-white mb-20 ml-4">
+                    <Card className="relative h-87.5 overflow-hidden text-white cursor-pointer  hover:shadow-2xl shadow-white mb-20 ml-4">
                       <img
                         src={workshop.imgUrl}
                         alt={workshop.title}
@@ -220,7 +231,11 @@ const Page = () => {
 
                           <div className="flex gap-2 pt-2">
                             <CalendarClock />
-                            {workshop.workshopTime}
+                            <span>
+                              {" "}
+                              {formatTime(workshop.workshopStartTime)}–
+                              {formatTime(workshop.workshopEndTime)}
+                            </span>
                           </div>
 
                           <div className="flex gap-2 text-white pt-2">

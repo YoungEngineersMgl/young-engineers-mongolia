@@ -22,7 +22,15 @@ export async function POST(req: Request) {
       token,
       process.env.JWT_SECRET!
     ) as JwtAdminPayload;
-    const { title, intro, imgUrl, closingNote, category, publishedDate } = body;
+    const {
+      title,
+      intro,
+      imgUrl,
+      closingNote,
+      category,
+      publishedDate,
+      authorName,
+    } = body;
 
     if (
       !title ||
@@ -30,7 +38,8 @@ export async function POST(req: Request) {
       !imgUrl ||
       !closingNote ||
       !category ||
-      !publishedDate
+      !publishedDate ||
+      !authorName
     ) {
       return NextResponse.json({ error: "Missing fields" }, { status: 401 });
     }
@@ -53,6 +62,7 @@ export async function POST(req: Request) {
             closingNote,
             category,
             publishedDate,
+            authorName, 
             researchAdmin: {
               connect: {
                 id: decoded.id,
@@ -79,7 +89,7 @@ export async function POST(req: Request) {
             closingNote,
             category,
             publishedDate: publishedDate,
-
+            authorName,
             admin: {
               connect: {
                 id: decoded.id,

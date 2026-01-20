@@ -75,6 +75,7 @@ model Blog {
   imgUrl        String
   closingNote   String
   publishedDate DateTime
+  authorName   String
   content       Content[]
   researchId    String?
   researchAdmin Admin?    @relation("researchAdmin", fields: [researchId], references: [id], onDelete: SetNull)
@@ -118,7 +119,8 @@ model Event {
   content          String
   imgUrl           String
   eventDate        DateTime
-  eventTime        String
+  eventStartTime        String
+  eventEndTime        String
   location         String
   registerUrl      String?
   engineeringId    String?
@@ -137,7 +139,8 @@ model Workshop {
   content          String
   imgUrl           String
   workshopDate     DateTime
-  workshopTime     String
+  workshopStartTime     String
+  workshopEndTime     String
   location         String
   registerUrl      String?
   marketingId      String?

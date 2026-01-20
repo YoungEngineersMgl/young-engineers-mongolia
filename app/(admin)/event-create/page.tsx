@@ -20,15 +20,21 @@ const Page = () => {
     title: "",
     content: "",
     eventDate: "",
-    eventTime: "",
+    startTime: "",
+    endTime: "",
     registerUrl: "",
     location: "",
   });
 
-  const eventDateTime = new Date(
-    `${inputValues.eventDate}T${inputValues.eventTime}`
+  const eventStartTime = new Date(
+    `${inputValues.eventDate}T${inputValues.startTime}`
   );
 
+  const eventEndTime = new Date(
+    `${inputValues.eventDate}T${inputValues.endTime}`
+  );
+  const eventDateTime = new Date(inputValues.eventDate);
+  
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -72,7 +78,8 @@ const Page = () => {
         content: inputValues.content,
         imgUrl: imageUrl,
         eventDate: eventDateTime,
-        eventTime: inputValues.eventTime,
+        eventStartTime: eventStartTime,
+        eventEndTime: eventEndTime,
         registerUrl: inputValues.registerUrl || null,
         location: inputValues.location,
       }),
@@ -83,7 +90,8 @@ const Page = () => {
         title: "",
         content: "",
         eventDate: "",
-        eventTime: "",
+        startTime: "",
+        endTime: "",
         registerUrl: "",
         location: "",
       });
@@ -174,12 +182,24 @@ const Page = () => {
 
         <div className="space-y-1.5">
           <label className="text-lg font-medium text-gray-700">
-            Event Time <span className="text-red-500">*</span>
+            Event Start Time <span className="text-red-500">*</span>
           </label>
           <Input
             type="time"
-            name="eventTime"
-            value={inputValues.eventTime}
+            name="startTime"
+            value={inputValues.startTime}
+            onChange={handleInputs}
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
+          />
+        </div>
+        <div className="space-y-1.5">
+          <label className="text-lg font-medium text-gray-700">
+            Event End Time <span className="text-red-500">*</span>
+          </label>
+          <Input
+            type="time"
+            name="endTime"
+            value={inputValues.endTime}
             onChange={handleInputs}
             className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
           />
@@ -272,7 +292,8 @@ const Page = () => {
             !inputValues.content ||
             !imageUrl ||
             !inputValues.eventDate ||
-            !inputValues.eventTime ||
+            !inputValues.startTime ||
+            !inputValues.endTime ||
             !inputValues.location ||
             loading
           }

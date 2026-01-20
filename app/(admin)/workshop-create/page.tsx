@@ -8,7 +8,6 @@ import { useState, useEffect, ChangeEvent } from "react";
 import { upload } from "@vercel/blob/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 
 const Page = () => {
@@ -21,15 +20,23 @@ const Page = () => {
     title: "",
     content: "",
     workshopDate: "",
-    workshopTime: "",
+    startTime: "",
+    endTime: "",
     registerUrl: "",
     location: "",
   });
 
-  const workshopDateTime = new Date(
-    `${inputValues.workshopDate}T${inputValues.workshopTime}`
+  const workshopDateTime = new Date(inputValues.workshopDate);
+
+  const workshopStartTime = new Date(
+    `${inputValues.workshopDate}T${inputValues.startTime}`
   );
 
+  const workshopEndTime = new Date(
+    `${inputValues.workshopDate}T${inputValues.endTime}`
+  );
+
+  
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -73,18 +80,21 @@ const Page = () => {
         content: inputValues.content,
         imgUrl: imageUrl,
         workshopDate: workshopDateTime,
-        workshopTime: inputValues.workshopTime,
+        workshopStartTime: workshopStartTime,
+        workshopEndTime: workshopEndTime,
         registerUrl: inputValues.registerUrl || null,
         location: inputValues.location,
       }),
     });
+
     if (response.ok) {
       toast.success("Workshop created successfully.");
       setInputValues({
         title: "",
         content: "",
         workshopDate: "",
-        workshopTime: "",
+        startTime: "",
+        endTime: "",
         registerUrl: "",
         location: "",
       });
@@ -181,12 +191,25 @@ const Page = () => {
 
         <div className="space-y-1.5">
           <label className="text-lg font-medium text-gray-700">
-            Workshop Time <span className="text-red-500">*</span>
+            Workshop Start Time <span className="text-red-500">*</span>
           </label>
           <Input
             type="time"
-            name="workshopTime"
-            value={inputValues.workshopTime}
+            name="startTime"
+            value={inputValues.startTime}
+            onChange={handleInputs}
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="text-lg font-medium text-gray-700">
+            Workshop End Time <span className="text-red-500">*</span>
+          </label>
+          <Input
+            type="time"
+            name="endTime"
+            value={inputValues.endTime}
             onChange={handleInputs}
             className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
           />
@@ -280,7 +303,8 @@ const Page = () => {
             !inputValues.content ||
             !imageUrl ||
             !inputValues.workshopDate ||
-            !inputValues.workshopTime ||
+            !inputValues.startTime ||
+            !inputValues.endTime ||
             !inputValues.location ||
             loading
           }

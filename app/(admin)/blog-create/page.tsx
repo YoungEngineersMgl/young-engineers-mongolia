@@ -59,6 +59,7 @@ const Page = () => {
     subTitle: "",
     blogContent: "",
     publishedDate: "",
+    authorName: "",
   });
 
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
@@ -134,6 +135,7 @@ const Page = () => {
         intro: inputValues.intro,
         imgUrl: imageUrl,
         closingNote: inputValues.closingNote,
+        authorName: inputValues.authorName,
         category: category,
         publishedDate: publishedDatePrisma,
       }),
@@ -348,7 +350,16 @@ const Page = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-
+          <div className="text-lg font-medium text-gray-700 mt-3">
+            Author Name <span className="text-red-500">*</span>
+          </div>
+          <Input
+            placeholder="Enter the author’s name"
+            className="bg-white mt-2"
+            name="authorName"
+            value={inputValues.authorName}
+            onChange={handleInputs}
+          />
           <Button
             onClick={createBlog}
             disabled={
@@ -392,7 +403,6 @@ const Page = () => {
             className="w-full rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white mt-2"
           />
 
-        
           <Card className="w-auto shadow-md border border-gray-200 mt-6">
             <CardHeader>
               <CardTitle className="text-2xl font-bold text-gray-700">

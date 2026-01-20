@@ -26,7 +26,8 @@ export async function POST(req: Request) {
       content,
       imgUrl,
       eventDate,
-      eventTime,
+      eventStartTime,
+      eventEndTime,
       registerUrl,
       location,
     } = body;
@@ -48,7 +49,8 @@ export async function POST(req: Request) {
       !content ||
       !imgUrl ||
       !eventDate ||
-      !eventTime ||
+      !eventStartTime ||
+      !eventEndTime ||
       !location
     ) {
       return NextResponse.json(
@@ -65,7 +67,8 @@ export async function POST(req: Request) {
             content,
             imgUrl,
             eventDate,
-            eventTime,
+            eventStartTime,
+            eventEndTime,
             registerUrl,
             location,
             engineeringId: decoded.id,
@@ -81,7 +84,8 @@ export async function POST(req: Request) {
             content,
             imgUrl,
             eventDate,
-            eventTime,
+            eventStartTime,
+            eventEndTime,
             registerUrl,
             location,
             marketingId: decoded.id,
@@ -97,7 +101,8 @@ export async function POST(req: Request) {
             content,
             imgUrl,
             eventDate,
-            eventTime,
+            eventStartTime,
+            eventEndTime,
             registerUrl,
             location,
             adminId: decoded.id,

@@ -12,7 +12,8 @@ import { Button } from "@/components/ui/button";
 type Workshop = {
   id: string;
   workshopDate: string;
-  workshopTime: string;
+  workshopStartTime: string;
+  workshopEndTime: string;
   imgUrl: string;
   title: string;
   location: string;
@@ -33,6 +34,11 @@ const Page = () => {
       setWorkshop(data);
     }
   };
+  const formatTime = (iso: string) =>
+    new Date(iso).toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   useEffect(() => {
     if (workshopId) {
@@ -40,6 +46,7 @@ const Page = () => {
     }
   }, [workshopId]);
 
+  if (!workshop) return null;
   return (
     <div className="min-h-screen w-full bg-[url('/blue6.jpg')] bg-cover bg-center">
       <Header />
@@ -65,7 +72,11 @@ const Page = () => {
 
               <div className="flex gap-2 text-white">
                 <CalendarClock className="w-6 h-6" />
-                {workshop?.workshopTime}
+                <span>
+                  {" "}
+                  {formatTime(workshop.workshopStartTime)}–
+                  {formatTime(workshop.workshopEndTime)}
+                </span>
               </div>
 
               <div className="flex gap-2 text-white">

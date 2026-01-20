@@ -155,6 +155,55 @@ const Page = () => {
       imgUrl: "/manager_17.jpg",
       season: "3",
     },
+    {
+      role: "President",
+      name: "Bolormaa Munkhbat",
+      email: "bolormaamunkhbat11@gmail.com",
+      imgUrl: "/persident.jpg",
+      season: "4",
+    },
+    {
+      role: "President",
+      name: "Odjargal Ganbold",
+      email: "odjargal543@gmail.com",
+      imgUrl: "/manager_16.jpg",
+      season: "4",
+    },
+    {
+      role: "Website Development Department Manager",
+      name: "Sarangerel Batbold",
+      email: "sarangerelbatbold11@gmail.com",
+      imgUrl: "/manager_18.jpg",
+      season: "4",
+    },
+    {
+      role: "Engineering Department Manager",
+      name: "Chinsanaa",
+      email: "chinsanaacc@gmail.com",
+      imgUrl: "/manager_18.jpg",
+      season: "4",
+    },
+    {
+      role: "Marketing Department Manager",
+      name: "Enerel",
+      email: "enerelbatgerel@gmail.com",
+      imgUrl: "/manager_19.png",
+      season: "4",
+    },
+    {
+      role: "Research Department Manager",
+      name: "Oyun-Erdene",
+      email: "borkhuuoyunerdene@gmail.com",
+      imgUrl: "/manager_20.png",
+      season: "4",
+    },
+    {
+      role: "Branch Manager",
+      name: "Sarangerel",
+      email: "chsar2009@gmail.com",
+      imgUrl: "/manager_15.jpg",
+      season: "4",
+    },
   ];
   const containerVariants = {
     hidden: {},
@@ -184,6 +233,7 @@ const Page = () => {
   const season1 = managers.filter((manager) => manager.season === "1");
   const season2 = managers.filter((manager) => manager.season === "2");
   const season3 = managers.filter((manager) => manager.season === "3");
+  const season4 = managers.filter((manager) => manager.season === "4");
   return (
     <div className="min-h-screen w-full bg-[url('/blue6.jpg')] bg-cover bg-center">
       {" "}
@@ -221,6 +271,12 @@ const Page = () => {
                     {manager.name}
                   </h3>
                   <div className="opacity-80 text-[16px]">{manager.role}</div>
+                  <div className="flex flex-col ">
+                    <div>Email Address:</div>
+                    <div className="text-white break-all opacity-80">
+                      {manager.email}
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -257,6 +313,12 @@ const Page = () => {
                     {manager.name}
                   </h3>
                   <div className="opacity-80 text-[16px]">{manager.role}</div>
+                  <div className="flex flex-col">
+                    <div>Email Address:</div>
+                    <div className="text-white break-all opacity-80">
+                      {manager.email}
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -293,6 +355,54 @@ const Page = () => {
                     {manager.name}
                   </h3>
                   <div className="opacity-80 text-[16px]">{manager.role}</div>
+                  <div className="flex flex-col">
+                    <div>Email Address:</div>
+                    <div className="text-white break-all opacity-80">
+                      {manager.email}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </section>
+        <section className="pb-20">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 text-center bit-white-glow mt-10">
+            Season 4 Managers
+          </h2>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, margin: "-80px" }}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-10"
+          >
+            {season4.map((manager) => (
+              <motion.div
+                key={`${manager.season}-${manager.name}`}
+                variants={cardVariants}
+                className="bg-white/10 backdrop-blur-sm rounded-xl p-3 text-white  group transition-all duration-300 ease-out hover:shadow-2xl hover:bg-blue-500/30 shadow-blue-200"
+              >
+                <div className="aspect-4/5 overflow-hidden rounded-lg">
+                  <img
+                    src={manager.imgUrl}
+                    alt={manager.name}
+                    className="w-full h-full object-cover object-top transition-transform duration-300 ease-out group-hover:scale-105"
+                  />
+                </div>
+
+                <div className="mt-2">
+                  <h3 className="text-2xl font-semibold leading-tight">
+                    {manager.name}
+                  </h3>
+                  <div className="opacity-80 text-[16px]">{manager.role}</div>
+                  <div className="flex flex-col">
+                    <div>Email Address:</div>
+                    <div className="text-white break-all opacity-80">
+                      {manager.email}
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             ))}

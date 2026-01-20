@@ -57,7 +57,8 @@ type Blog = {
 
 type Workshop = {
   workshopDate: string;
-  workshopTime: string;
+  workshopStartTime: string;
+  workshopEndTime: string;
   location: string;
   title: string;
   imgUrl: string;
@@ -75,7 +76,8 @@ type Event = {
   title: string;
   imgUrl: string;
   eventDate: string;
-  eventTime: string;
+  eventStartTime: string;
+  eventEndTime: string;
   location: string;
 };
 const Page = () => {
@@ -117,6 +119,11 @@ const Page = () => {
       setBlogs(data);
     }
   };
+  const formatTime = (iso: string) =>
+    new Date(iso).toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   const handleInputs = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -699,7 +706,6 @@ const Page = () => {
                         </Dialog>
                       </div>
 
-                      {/* Workshop Details */}
                       <div className="flex flex-col gap-2 text-sm text-gray-600">
                         <div className="flex items-center gap-2">
                           <MapPin className="w-4 h-4 text-gray-500" />
@@ -718,7 +724,11 @@ const Page = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <Clock className="w-4 h-4 text-gray-500" />
-                          <span>{workshop.workshopTime}</span>
+                          <span>
+                            {" "}
+                            {formatTime(workshop.workshopStartTime)}–
+                            {formatTime(workshop.workshopEndTime)}
+                          </span>
                         </div>
                       </div>
                     </CardContent>
@@ -792,7 +802,6 @@ const Page = () => {
                         </Dialog>
                       </div>
 
-                      {/* Workshop Details */}
                       <div className="flex flex-col gap-2 text-sm text-gray-600">
                         <div className="flex items-center gap-2">
                           <MapPin className="w-4 h-4 text-gray-500" />
@@ -809,7 +818,11 @@ const Page = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <Clock className="w-4 h-4 text-gray-500" />
-                          <span>{event.eventTime}</span>
+                          <span>
+                            {" "}
+                            {formatTime(event.eventStartTime)}–
+                            {formatTime(event.eventEndTime)}
+                          </span>
                         </div>
                       </div>
                     </CardContent>
@@ -818,12 +831,10 @@ const Page = () => {
               ))}
             </CarouselContent>
 
-            {/* Carousel Arrows */}
             <CarouselPrevious className="hidden sm:flex -left-10" />
             <CarouselNext className="hidden sm:flex -right-10" />
           </Carousel>
         </section>
-        {/* You can repeat same structure for Projects / Workshops / Events */}
       </main>
     </div>
   );

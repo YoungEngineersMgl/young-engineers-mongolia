@@ -16,7 +16,8 @@ import {
 type Event = {
   id: string;
   eventDate: string;
-  eventTime: string;
+  eventStartTime: string;
+  eventEndTime: string;
   imgUrl: string;
   title: string;
   location: string;
@@ -51,6 +52,12 @@ const Page = () => {
   useEffect(() => {
     fetchEvents();
   }, []);
+
+  const formatTime = (iso: string) =>
+    new Date(iso).toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
 
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: false })
@@ -118,7 +125,11 @@ const Page = () => {
 
                           <div className="flex gap-2 pt-2">
                             <CalendarClock />
-                            {event.eventTime}
+                            <span>
+                              {" "}
+                              {formatTime(event.eventStartTime)}–
+                              {formatTime(event.eventEndTime)}
+                            </span>
                           </div>
 
                           <div className="flex gap-2 text-white pt-2">
@@ -207,7 +218,11 @@ const Page = () => {
 
                           <div className="flex gap-2 pt-2">
                             <CalendarClock />
-                            {event.eventTime}
+                            <span>
+                              {" "}
+                              {formatTime(event.eventStartTime)}–
+                              {formatTime(event.eventEndTime)}
+                            </span>
                           </div>
 
                           <div className="flex gap-2 text-white pt-2">

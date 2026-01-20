@@ -10,7 +10,8 @@ import { Badge } from "@/components/ui/badge";
 type Event = {
   id: string;
   eventDate: string;
-  eventTime: string;
+  eventStartTime: string;
+  eventEndTime: string;
   imgUrl: string;
   title: string;
   location: string;
@@ -30,12 +31,18 @@ const Page = () => {
     }
   };
 
+  const formatTime = (iso: string) =>
+    new Date(iso).toLocaleTimeString("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
   useEffect(() => {
     if (eventId) {
       fetchEvent();
     }
   }, [eventId]);
-
+  if (!event) return null;
   return (
     <div className="min-h-screen w-full bg-[url('/blue6.jpg')] bg-cover bg-center">
       <Header />
@@ -49,7 +56,7 @@ const Page = () => {
             <img
               src={event?.imgUrl}
               alt={event?.title}
-              className="w-[450px] h-full object-cover rounded-2xl mt-5"
+              className="w-112.5 h-full object-cover rounded-2xl mt-5"
             />
             <div className="flex flex-col gap-3 text-lg text-white mt-4 md:ml-5">
               <div className="flex gap-2">
@@ -59,7 +66,11 @@ const Page = () => {
 
               <div className="flex gap-2 text-white">
                 <CalendarClock className="w-6 h-6" />
-                {event?.eventTime}
+                <span>
+                  {" "}
+                  {formatTime(event?.eventStartTime)}–
+                  {formatTime(event?.eventEndTime)}
+                </span>
               </div>
 
               <div className="flex gap-2 text-white">

@@ -10,7 +10,11 @@ export const GET = async (
     const blog = await prisma.blog.findUnique({
       where: { id: blogId },
       include: {
-        comments: true,
+        comments: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
       },
     });
 

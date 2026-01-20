@@ -135,8 +135,12 @@
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.366),
       0 0 20px rgba(245, 231, 231, 0.702), 0 0 40px rgba(246, 248, 250, 0.577);
   }
-}
 
+  .bit-yellow-glow {
+    text-shadow: 0 0 10px rgba(242, 239, 34, 0.822),
+      0 0 20px rgba(245, 241, 6, 0.702), 0 0 40px rgba(228, 235, 10, 0.577);
+  }
+}
 
 @layer base {
   * {

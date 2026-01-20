@@ -19,6 +19,7 @@ type Blog = {
   content: BlogContent[];
   publishedDate: string;
   title: string;
+  authorName: string;
 };
 
 type BlogContent = {
@@ -45,6 +46,7 @@ const Page = () => {
   });
   const [blog, setBlog] = useState<Blog | null>(null);
   const [comments, setComments] = useState<Comment[]>([]);
+  const char = inputValues.comment.length;
   const [blogContent, setBlogContent] = useState<BlogContent[]>([]);
   const fetchBlog = async () => {
     const res = await fetch(`/api/get-blog/${blogId}`);
@@ -104,6 +106,9 @@ const Page = () => {
         });
         fetchBlog();
         getComment();
+      } else if (!res.ok) {
+        const data = await res.json();
+        toast.error(data.error || "Сэтгэгдэл илгээхэд алдаа гарлаа");
       }
     } catch (err) {
       toast.error("Сэтгэгдэл илгээхэд алдаа гарлаа");
@@ -177,6 +182,10 @@ const Page = () => {
             {blog?.closingNote}
           </p>
         </section>
+        <div className="flex items-center gap-2 text-white mb-10 text-[21px]">
+          <div className="text-white">Written by</div>
+          <div className="font-bold"> {blog?.authorName}</div>
+        </div>
       </div>
 
       <section className="bg-blue-950 py-12">
@@ -200,7 +209,7 @@ const Page = () => {
 
               <textarea
                 placeholder="Сэтгэгдлээ энд бичнэ үү..."
-                className="w-full min-h-[120px] rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white resize-none"
+                className="w-full min-h-30 rounded-xl border p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white resize-none"
                 name="comment"
                 value={inputValues.comment}
                 onChange={handleInputs}
@@ -215,6 +224,13 @@ const Page = () => {
                 >
                   {isSubmitting ? "Илгээж байна..." : "Илгээх"}
                 </Button>
+              </div>
+              <div className="text-white">
+                Та 100-с доошгүй тэмдэгт ашиглан санал сэтгэгдлээ чөлөөтэй
+                бөгөөд бүтээлчээр хуваалцаарай.{" "}
+                <span>
+                  Тэмдэгт: {inputValues.comment.replace(/\s/g, "").length}
+                </span>
               </div>
             </div>
           </div>

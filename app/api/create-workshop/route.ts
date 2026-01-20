@@ -27,7 +27,8 @@ export async function POST(req: Request) {
       content,
       imgUrl,
       workshopDate,
-      workshopTime,
+      workshopStartTime,
+      workshopEndTime,
       registerUrl,
       location,
     } = body;
@@ -49,11 +50,12 @@ export async function POST(req: Request) {
       !content ||
       !imgUrl ||
       !workshopDate ||
-      !workshopTime ||
+      !workshopStartTime ||
+      !workshopEndTime ||
       !location
     ) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: "Please fill in all required fields" },
         { status: 400 }
       );
     }
@@ -66,7 +68,8 @@ export async function POST(req: Request) {
             content,
             imgUrl,
             workshopDate,
-            workshopTime,
+            workshopStartTime,
+            workshopEndTime,
             location,
             registerUrl,
             engineeringId: decoded.id,
@@ -82,7 +85,8 @@ export async function POST(req: Request) {
             content,
             imgUrl,
             workshopDate,
-            workshopTime,
+            workshopStartTime,
+            workshopEndTime,
             location,
             registerUrl,
             marketingId: decoded.id,
@@ -98,7 +102,8 @@ export async function POST(req: Request) {
             content,
             imgUrl,
             workshopDate,
-            workshopTime,
+            workshopStartTime,
+            workshopEndTime,
             location,
             registerUrl,
             adminId: decoded.id,
@@ -108,7 +113,7 @@ export async function POST(req: Request) {
       }
     }
   } catch (err) {
-    NextResponse.json({ message: err }, { status: 500 });
+    return NextResponse.json({ message: err }, { status: 500 });
   }
 }
 

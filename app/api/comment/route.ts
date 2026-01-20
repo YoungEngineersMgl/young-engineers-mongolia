@@ -7,13 +7,26 @@ export async function POST(req: Request) {
 
     const { name, comment, blogId } = body;
 
-    if (!comment) {
-      return NextResponse.json({ error: "Comment baihgui baina" });
+    if (!comment || comment.trim().length === 0) {
+      return NextResponse.json(
+        { error: "Сэтгэгдэл хоосон байна" },
+        { status: 400 }
+      );
+    }
+
+    if (comment.trim().length < 100) {
+      return NextResponse.json(
+        { error: "Сэтгэгдэл дор хаяж 100 тэмдэгттэй байх ёстой" },
+        { status: 400 }
+      );
     }
 
     const blog = await prisma.blog.findUnique({
       where: { id: blogId },
     });
+    if (!blog) {
+      return NextResponse.json({ error: "Blog олдсонгүй" }, { status: 404 });
+    }
 
     if (blog) {
       const createComment = await prisma.comments.create({

@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 
 export async function POST(
   req: Request,
-  context: { params: { token: string } }
+  context: { params: Promise<{ token: string }> },
 ) {
   if (process.env.NODE_ENV === "production") {
     return NextResponse.json({ error: "Not allowed" }, { status: 403 });
@@ -26,14 +26,14 @@ export async function POST(
     if (!findAdmin || !findAdmin.inviteToken || !findAdmin.inviteExpiresAt) {
       return NextResponse.json(
         { error: "You are not invited" },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     if (findAdmin.inviteExpiresAt < new Date()) {
       return NextResponse.json(
         { error: "Invite token expired" },
-        { status: 403 }
+        { status: 403 },
       );
     }
 
@@ -63,7 +63,7 @@ export async function POST(
     if (passwordErrors.length > 0) {
       return NextResponse.json(
         { error: "Weak password", details: passwordErrors },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -71,7 +71,7 @@ export async function POST(
     if (newPassword !== confirmPassword) {
       return NextResponse.json(
         { error: "Passwords do not match" },
-        { status: 400 }
+        { status: 400 },
       );
     }
     const hashedPassword = await bcrypt.hash(newPassword, 12);

@@ -1,4 +1,5 @@
 import { PrismaClient, Category } from "@/app/generated/prisma/client";
+
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 export const GET = async (

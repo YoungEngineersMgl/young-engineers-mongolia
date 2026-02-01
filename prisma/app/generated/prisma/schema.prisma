@@ -1,0 +1,163 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "./app/generated/prisma"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Category {
+  SOFTWARE
+  NANO
+  CHEMICAL
+  MECHANICAL
+  ENVIRONMENTAL
+  ELECTRICAL
+  AEROSPACE
+  CIVIL
+  BIOMEDICAL
+}
+
+enum Role {
+  RESEARCH
+  MARKETING
+  FOUNDER
+  ENGINEERING
+}
+
+enum AdminStatus {
+  PENDING
+  ACTIVE
+}
+
+model Admin {
+  id              String      @id @default(nanoid())
+  role            Role
+  status          AdminStatus
+  inviteToken     String?
+  inviteExpiresAt DateTime?
+  email           String      @unique
+  password        String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  workshopsMarketing Workshop[] @relation("marketingAdmin")
+  workshopsAdmin     Workshop[] @relation("admin")
+
+  blogResearch Blog[] @relation("researchAdmin")
+  blogAdmin    Blog[] @relation("admin")
+
+  projectMarketing Project[] @relation("marketingAdmin")
+  projectAdmin     Project[] @relation("admin")
+
+  eventMarketing Event[] @relation("marketingAdmin")
+  eventAdmin     Event[] @relation("admin")
+
+  projectsEngineering Project[] @relation("engineeringAdmin")
+
+  eventsEngineering Event[] @relation("engineeringAdmin")
+
+  workshopsEngineering Workshop[] @relation("engineeringAdmin")
+}
+
+model Blog {
+  id            String     @id @default(nanoid())
+  title         String
+  intro         String
+  imgUrl        String
+  closingNote   String
+  publishedDate DateTime
+  authorName    String
+  content       Content[]
+  researchId    String?
+  researchAdmin Admin?     @relation("researchAdmin", fields: [researchId], references: [id], onDelete: SetNull)
+  adminId       String?
+  admin         Admin?     @relation("admin", fields: [adminId], references: [id], onDelete: SetNull)
+  category      Category
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  comments      Comments[]
+}
+
+model Content {
+  id            String   @id @default(nanoid())
+  blogId        String
+  blog          Blog     @relation(fields: [blogId], references: [id])
+  subTitle      String
+  content       String
+  contentimgUrl String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Project {
+  id               String   @id @default(nanoid())
+  title            String
+  content          String
+  imgUrl           String
+  marketingId      String?
+  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id], onDelete: SetNull)
+  engineeringId    String?
+  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id], onDelete: SetNull)
+  adminId          String?
+  admin            Admin?   @relation("admin", fields: [adminId], references: [id], onDelete: SetNull)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Event {
+  id               String   @id @default(nanoid())
+  title            String
+  content          String
+  imgUrl           String
+  eventDate        DateTime
+  eventStartTime   String
+  eventEndTime     String
+  location         String
+  registerUrl      String?
+  engineeringId    String?
+  engineeringAdmin Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id], onDelete: SetNull)
+  marketingId      String?
+  marketingAdmin   Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id], onDelete: SetNull)
+  adminId          String?
+  admin            Admin?   @relation("admin", fields: [adminId], references: [id], onDelete: SetNull)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Workshop {
+  id                String   @id @default(nanoid())
+  title             String
+  content           String
+  imgUrl            String
+  workshopDate      DateTime
+  workshopStartTime String
+  workshopEndTime   String
+  location          String
+  registerUrl       String?
+  marketingId       String?
+  engineeringId     String?
+  engineeringAdmin  Admin?   @relation("engineeringAdmin", fields: [engineeringId], references: [id], onDelete: SetNull)
+  adminId           String?
+  admin             Admin?   @relation("admin", fields: [adminId], references: [id], onDelete: SetNull)
+  marketingAdmin    Admin?   @relation("marketingAdmin", fields: [marketingId], references: [id], onDelete: SetNull)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Comments {
+  id        String   @id @default(nanoid())
+  blogId    String
+  blog      Blog     @relation(fields: [blogId], references: [id])
+  name      String   @default("Зочин")
+  comment   String
+  createdAt DateTime @default(now())
+}

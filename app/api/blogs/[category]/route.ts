@@ -1,10 +1,9 @@
-import { Category } from "@/app/generated/prisma/enums";
+import { PrismaClient, Category } from "@/app/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
-
 export const GET = async (
   req: Request,
-  context: { params: Promise<{ category: string }> }
+  context: { params: Promise<{ category: string }> },
 ) => {
   try {
     const { category } = await context.params;

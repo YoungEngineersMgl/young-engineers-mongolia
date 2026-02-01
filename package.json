@@ -10,6 +10,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-dialog": "^1.1.15",
@@ -19,6 +20,7 @@
     "bcrypt": "^6.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "dotenv": "^17.2.3",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.24.12",
@@ -26,6 +28,7 @@
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.562.0",
     "next": "16.0.7",
+    "pg": "^8.18.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "resend": "^6.6.0",

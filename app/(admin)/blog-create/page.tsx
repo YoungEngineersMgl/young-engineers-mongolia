@@ -75,7 +75,7 @@ const Page = () => {
   };
 
   const handleInputs = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setInputValues({ ...inputValues, [name]: value });
@@ -118,7 +118,7 @@ const Page = () => {
   };
 
   const publishedDatePrisma = new Date(
-    `${inputValues.publishedDate}T08:30:00Z`
+    `${inputValues.publishedDate}T08:30:00Z`,
   );
 
   const createBlog = async () => {
@@ -302,7 +302,7 @@ const Page = () => {
             name="publishedDate"
             value={inputValues.publishedDate}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-2.5"
           />
 
           <div className="text-lg font-medium text-gray-700 mt-3">

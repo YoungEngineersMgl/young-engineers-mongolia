@@ -27,14 +27,14 @@ const Page = () => {
   });
 
   const eventStartTime = new Date(
-    `${inputValues.eventDate}T${inputValues.startTime}`
+    `${inputValues.eventDate}T${inputValues.startTime}`,
   );
 
   const eventEndTime = new Date(
-    `${inputValues.eventDate}T${inputValues.endTime}`
+    `${inputValues.eventDate}T${inputValues.endTime}`,
   );
   const eventDateTime = new Date(inputValues.eventDate);
-  
+
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -53,7 +53,7 @@ const Page = () => {
   };
 
   const handleInputs = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setInputValues({ ...inputValues, [name]: value });
@@ -176,7 +176,7 @@ const Page = () => {
             name="eventDate"
             value={inputValues.eventDate}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-2.5"
           />
         </div>
 
@@ -189,7 +189,7 @@ const Page = () => {
             name="startTime"
             value={inputValues.startTime}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-2.5"
           />
         </div>
         <div className="space-y-1.5">
@@ -201,7 +201,7 @@ const Page = () => {
             name="endTime"
             value={inputValues.endTime}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-2.5"
           />
         </div>
 

@@ -1,12 +1,24 @@
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-
+import { Category } from "@prisma/client";
 type JwtAdminPayload = {
   id: string;
   role: "FOUNDER" | "RESEARCH" | "ENGINEERING" | "MARKETING";
   status: "ACTIVE" | "PENDING";
 };
+
+// export enum Category {
+//   SOFTWARE = "SOFTWARE",
+//   MECHANICAL = "MECHANICAL",
+//   NANO = "NANO",
+//   ENVIRONMENTAL = "ENVIRONMENTAL",
+//   ELECTRICAL = "ELECTRICAL",
+//   AEROSPACE = "AEROSPACE",
+//   CIVIL = "CIVIL",
+//   CHEMICAL = "CHEMICAL",
+//   BIOMEDICAL = "BIOMEDICAL",
+// }
 
 export async function POST(req: Request) {
   try {
@@ -20,7 +32,7 @@ export async function POST(req: Request) {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET!
+      process.env.JWT_SECRET!,
     ) as JwtAdminPayload;
     const {
       title,
@@ -62,7 +74,7 @@ export async function POST(req: Request) {
             closingNote,
             category,
             publishedDate,
-            authorName, 
+            authorName,
             researchAdmin: {
               connect: {
                 id: decoded.id,
@@ -124,23 +136,11 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json(
       { message: "successfully deleted" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return NextResponse.json(err, { status: 500 });
   }
-}
-
-export enum Category {
-  SOFTWARE = "SOFTWARE",
-  MECHANICAL = "MECHANICAL",
-  NANO = "NANO",
-  ENVIRONMENTAL = "ENVIRONMENTAL",
-  ELECTRICAL = "ELECTRICAL",
-  AEROSPACE = "AEROSPACE",
-  CIVIL = "CIVIL",
-  CHEMICAL = "CHEMICAL",
-  BIOMEDICAL = "BIOMEDICAL",
 }
 
 export async function PUT(req: Request) {
@@ -153,7 +153,7 @@ export async function PUT(req: Request) {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET!
+      process.env.JWT_SECRET!,
     ) as JwtAdminPayload;
 
     const { blogId, newTitle, newImgUrl, newCategory, newPublishedDate } = body;
@@ -176,6 +176,12 @@ export async function PUT(req: Request) {
       publishedDate?: Date;
     } = {};
 
+    if (Object.values(Category).includes(newCategory as Category)) {
+      dataToUpdate.category = newCategory as Category;
+    } else {
+      return NextResponse.json({ error: "Invalid category" }, { status: 400 });
+    }
+
     if (typeof newTitle === "string") dataToUpdate.title = newTitle;
     if (typeof newImgUrl === "string") dataToUpdate.imgUrl = newImgUrl;
 
@@ -185,7 +191,7 @@ export async function PUT(req: Request) {
       } else {
         return NextResponse.json(
           { error: "Invalid category" },
-          { status: 400 }
+          { status: 400 },
         );
       }
     }

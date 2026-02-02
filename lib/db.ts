@@ -1,3 +1,17 @@
-import { PrismaClient } from "@/app/generated/prisma/client";
+import { PrismaClient } from "@prisma/client";
 
-export const prisma = new PrismaClient();
+// Next.js hot reload үед давхар initialize хийхээс сэргийлэх
+const globalForPrisma = globalThis as unknown as { prisma?: PrismaClient };
+import { PrismaNeon } from "@prisma/adapter-neon";
+import dotenv from "dotenv";
+
+dotenv.config();
+const connectionString = `${process.env.DATABASE_URL}`;
+
+const adapter = new PrismaNeon({ connectionString });
+export const prisma = new PrismaClient({ adapter });
+
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPrisma.prisma = prisma;
+}

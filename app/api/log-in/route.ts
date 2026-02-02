@@ -1,4 +1,3 @@
-import { Role } from "@/app/generated/prisma/client";
 import { prisma } from "@/lib/db";
 import { NextResponse } from "next/server";
 import bcrypt from "bcrypt";
@@ -36,7 +35,7 @@ export async function POST(req: Request) {
           status: admin.status,
         },
         process.env.JWT_SECRET!,
-        { expiresIn: "9h" }
+        { expiresIn: "9h" },
       );
 
       return NextResponse.json(token, {

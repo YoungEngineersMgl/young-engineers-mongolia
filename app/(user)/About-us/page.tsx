@@ -5,13 +5,6 @@ import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Variants, Transition } from "framer-motion";
 import { useRouter } from "next/navigation";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 
 const Page = () => {
   const managers = [
@@ -251,16 +244,13 @@ Goomaral is particularly interested in researching ethics in technology, science
   };
 
   const cardVariants: Variants = {
-    hidden: {
-      opacity: 0,
-      y: 12,
-    },
+    hidden: { opacity: 0, y: 8 },
     visible: {
       opacity: 1,
       y: 0,
       transition: {
-        duration: 0.22,
-        ease: [0.25, 0.1, 0.25, 1],
+        duration: 0.28,
+        ease: "easeOut",
       },
     },
   };
@@ -286,7 +276,7 @@ Goomaral is particularly interested in researching ethics in technology, science
                   `/About-us/${person.name.toLowerCase().replace(/ /g, "-")}`,
                 )
               }
-              className="flex-1 min-w-[200px] max-w-[250px] cursor-pointer rounded-2xl border border-white/15 bg-white/5 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.9)] hover:shadow-blue-400/40 overflow-hidden transition-all duration-300 hover:scale-[1.03]"
+              className="flex-1 min-w-50 max-w-62.5 cursor-pointer rounded-2xl border border-white/15 bg-white/5 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.9)] hover:shadow-blue-400/40 overflow-hidden transition-all duration-300 hover:scale-[1.03]"
             >
               <img
                 src={person.imgUrl}
@@ -308,7 +298,7 @@ Goomaral is particularly interested in researching ethics in technology, science
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: false, margin: "-80px" }}
+            viewport={{ once: true, amount: 0.25 }}
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-10"
           >
             {season1.map((manager) => (
@@ -326,7 +316,15 @@ Goomaral is particularly interested in researching ethics in technology, science
                 </div>
 
                 <div className="mt-2">
-                  <h3 className="text-2xl font-semibold leading-tight">
+                  <h3
+                    className="
+    text-xl sm:text-2xl
+    font-semibold
+    leading-snug
+    wrap-break-word
+    text-center
+  "
+                  >
                     {manager.name}
                   </h3>
                   <div className="opacity-80 text-[16px]">{manager.role}</div>
@@ -368,7 +366,15 @@ Goomaral is particularly interested in researching ethics in technology, science
                 </div>
 
                 <div className="mt-2">
-                  <h3 className="text-2xl font-semibold leading-tight">
+                  <h3
+                    className="
+    text-xl sm:text-2xl
+    font-semibold
+    leading-snug
+    wrap-break-word
+    text-center
+  "
+                  >
                     {manager.name}
                   </h3>
                   <div className="opacity-80 text-[16px]">{manager.role}</div>
@@ -410,7 +416,15 @@ Goomaral is particularly interested in researching ethics in technology, science
                 </div>
 
                 <div className="mt-2">
-                  <h3 className="text-2xl font-semibold leading-tight">
+                  <h3
+                    className="
+    text-xl sm:text-2xl
+    font-semibold
+    leading-snug
+    wrap-break-word
+    text-center
+  "
+                  >
                     {manager.name}
                   </h3>
                   <div className="opacity-80 text-[16px]">{manager.role}</div>
@@ -452,7 +466,15 @@ Goomaral is particularly interested in researching ethics in technology, science
                 </div>
 
                 <div className="mt-2">
-                  <h3 className="text-2xl font-semibold leading-tight">
+                  <h3
+                    className="
+    text-xl sm:text-2xl
+    font-semibold
+    leading-snug
+    wrap-break-word
+    text-center
+  "
+                  >
                     {manager.name}
                   </h3>
                   <div className="opacity-80 text-[16px]">{manager.role}</div>

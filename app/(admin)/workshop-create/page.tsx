@@ -29,14 +29,13 @@ const Page = () => {
   const workshopDateTime = new Date(inputValues.workshopDate);
 
   const workshopStartTime = new Date(
-    `${inputValues.workshopDate}T${inputValues.startTime}`
+    `${inputValues.workshopDate}T${inputValues.startTime}`,
   );
 
   const workshopEndTime = new Date(
-    `${inputValues.workshopDate}T${inputValues.endTime}`
+    `${inputValues.workshopDate}T${inputValues.endTime}`,
   );
 
-  
   const handleFile = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -55,7 +54,7 @@ const Page = () => {
   };
 
   const handleInputs = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
     setInputValues({ ...inputValues, [name]: value });
@@ -185,7 +184,19 @@ const Page = () => {
             name="workshopDate"
             value={inputValues.workshopDate}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
+            className="
+    h-12
+    px-4
+    py-2
+    rounded-xl
+    border-gray-300
+    focus:ring-2
+    focus:ring-blue-200
+    mt-2
+    mb-2
+    bg-white
+    text-base
+  "
           />
         </div>
 
@@ -198,7 +209,19 @@ const Page = () => {
             name="startTime"
             value={inputValues.startTime}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
+            className="
+    h-12
+    px-4
+    py-2
+    rounded-xl
+    border-gray-300
+    focus:ring-2
+    focus:ring-blue-200
+    mt-2
+    mb-2
+    bg-white
+    text-base
+  "
           />
         </div>
 
@@ -211,7 +234,19 @@ const Page = () => {
             name="endTime"
             value={inputValues.endTime}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white"
+            className="
+    h-12
+    px-4
+    py-2
+    rounded-xl
+    border-gray-300
+    focus:ring-2
+    focus:ring-blue-200
+    mt-2
+    mb-2
+    bg-white
+    text-base
+  "
           />
         </div>
 

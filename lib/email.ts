@@ -10,7 +10,7 @@ export async function sendInviteEmail(
   const inviteLink = `${process.env.APP_URL}/activate/${token}`;
 
   await resend.emails.send({
-    from: "https://www.youngengineersmongolia.com/",
+    from: "onboarding@resend.dev",
     to: email,
     subject: `Admin эрхийн урилга – Аккаунтаа идэвхжүүлнэ үү.`,
     html: `  <p>Сайн байна уу,</p>

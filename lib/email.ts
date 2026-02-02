@@ -5,12 +5,12 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function sendInviteEmail(
   email: string,
   token: string,
-  role: string
+  role: string,
 ) {
   const inviteLink = `${process.env.APP_URL}/activate/${token}`;
 
   await resend.emails.send({
-    from: "onboarding@resend.dev",
+    from: "https://www.youngengineersmongolia.com/",
     to: email,
     subject: `Admin эрхийн урилга – Аккаунтаа идэвхжүүлнэ үү.`,
     html: `  <p>Сайн байна уу,</p>

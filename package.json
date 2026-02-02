@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "postinstall": "prisma generate",
-    "build": "next build --webpack",
+    "generate": "npx prisma generate",
+    "build": "npm run generate && next build --webpack",
     "start": "next start",
     "lint": "eslint"
   },

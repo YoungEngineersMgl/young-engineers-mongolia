@@ -13,9 +13,6 @@ type JwtAdminPayload = {
 };
 
 export async function POST(req: Request) {
-  if (process.env.NODE_ENV === "production") {
-    return NextResponse.json({ error: "Not allowed" }, { status: 403 });
-  }
   try {
     const body = await req.json();
     const { email, role } = body;
@@ -28,7 +25,7 @@ export async function POST(req: Request) {
         {
           message: "JWT_SECRET is not set in environment variables",
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -40,7 +37,7 @@ export async function POST(req: Request) {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET!
+      process.env.JWT_SECRET!,
     ) as JwtAdminPayload;
 
     if (decoded.role !== "FOUNDER") {
@@ -58,7 +55,7 @@ export async function POST(req: Request) {
     if (isExists) {
       return NextResponse.json(
         { error: "Email already exists" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -94,7 +91,7 @@ export async function GET(req: Request) {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET!
+      process.env.JWT_SECRET!,
     ) as JwtAdminPayload;
 
     const isFounder = decoded.role === "FOUNDER";
@@ -129,7 +126,7 @@ export async function DELETE(req: Request) {
     const token = authHeader.split(" ")[1];
     const decoded = jwt.verify(
       token,
-      process.env.JWT_SECRET!
+      process.env.JWT_SECRET!,
     ) as JwtAdminPayload;
 
     if (decoded.role !== "FOUNDER") {
@@ -141,7 +138,7 @@ export async function DELETE(req: Request) {
     if (decoded.id === id) {
       return NextResponse.json(
         { error: "You cannot delete your own account." },
-        { status: 404 }
+        { status: 404 },
       );
     }
     const deleteAdmin = await prisma.admin.delete({
@@ -150,7 +147,7 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json(
       { message: "Successfully deleted" },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (err) {
     return NextResponse.json({ error: err }, { status: 500 });

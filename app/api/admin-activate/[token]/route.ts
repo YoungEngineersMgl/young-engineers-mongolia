@@ -7,9 +7,7 @@ export async function POST(
   req: Request,
   context: { params: Promise<{ token: string }> },
 ) {
-  if (process.env.NODE_ENV === "production") {
-    return NextResponse.json({ error: "Not allowed" }, { status: 403 });
-  }
+ 
   const body = await req.json();
   const JWT_SECRET = process.env.JWT_SECRET;
   try {

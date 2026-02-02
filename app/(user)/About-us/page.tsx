@@ -277,43 +277,24 @@ Goomaral is particularly interested in researching ethics in technology, science
       <Header />{" "}
       <div className="pt-20">
         {" "}
-        <div className="flex gap-6 flex-wrap justify-center">
+        <div className="flex flex-wrap justify-center gap-6 px-4">
           {biography.map((person, index) => (
             <div
               key={index}
-              className="pl-4 py-6 basis-1/2 sm:basis-1/3 md:basis-1/4 overflow-visible"
+              onClick={() =>
+                push(
+                  `/About-us/${person.name.toLowerCase().replace(/ /g, "-")}`,
+                )
+              }
+              className="flex-1 min-w-[200px] max-w-[250px] cursor-pointer rounded-2xl border border-white/15 bg-white/5 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.9)] hover:shadow-blue-400/40 overflow-hidden transition-all duration-300 hover:scale-[1.03]"
             >
-              <div
-                onClick={() =>
-                  push(
-                    `/About-us/${person.name.toLowerCase().replace(/ /g, "-")}`,
-                  )
-                }
-                className="
-            cursor-pointer
-            rounded-2xl
-            border border-white/15
-            bg-white/5
-            backdrop-blur-sm
-            shadow-[0_20px_40px_-15px_rgba(0,0,0,0.9)]
-            hover:shadow-blue-400/40
-            overflow-hidden
-            transition-all
-            duration-300
-         hover:scale-[1.03]
-            mx-4
-            hover:border-blue-400/50
-          "
-              >
-                <img
-                  src={person.imgUrl}
-                  alt={person.name}
-                  className="w-full h-56 object-cover"
-                />
-
-                <div className="p-3 text-center text-white text-sm font-medium">
-                  {person.name}
-                </div>
+              <img
+                src={person.imgUrl}
+                alt={person.name}
+                className="w-full h-56 object-cover"
+              />
+              <div className="p-3 text-center text-white text-sm font-medium">
+                {person.name}
               </div>
             </div>
           ))}

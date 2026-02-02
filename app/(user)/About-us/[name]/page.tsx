@@ -64,7 +64,7 @@ Goomaral is particularly interested in researching ethics in technology, science
               <p className="mt-8 text-3xl text-blue-200 font-serif">
                 {person.role}
               </p>
-              <p className="mt-4 text-lg  text-white">{person.email}</p>
+              <p className="mt-4 text-lg  text-white font-serif">{person.email}</p>
 
               <div className="absolute -inset-3 rounded-3xl bg-blue-400/10 blur-2xl -z-10" />
             </div>
@@ -79,7 +79,7 @@ Goomaral is particularly interested in researching ethics in technology, science
                 Biography
               </h3>
 
-              <div className="space-y-4 leading-relaxed text-white/90 text-[18px] ">
+              <div className="space-y-4 leading-relaxed text-white/90 text-[18px] font-serif">
                 {person.biography.split("\n").map((para, i) => (
                   <p key={i}>{para}</p>
                 ))}

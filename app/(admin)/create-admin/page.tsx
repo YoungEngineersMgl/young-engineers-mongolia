@@ -75,7 +75,6 @@ const Page = () => {
     setRole("");
     toast.success("Invite email sent successfully");
     fetchAdmins();
-
     setLoading(false);
   };
 

@@ -184,7 +184,7 @@ const Page = () => {
             name="workshopDate"
             value={inputValues.workshopDate}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-2"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-3"
           />
         </div>
 
@@ -197,7 +197,7 @@ const Page = () => {
             name="startTime"
             value={inputValues.startTime}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-2"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-3"
           />
         </div>
 
@@ -210,7 +210,7 @@ const Page = () => {
             name="endTime"
             value={inputValues.endTime}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-2"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-3"
           />
         </div>
 

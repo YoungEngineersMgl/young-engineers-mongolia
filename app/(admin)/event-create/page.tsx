@@ -176,7 +176,7 @@ const Page = () => {
             name="eventDate"
             value={inputValues.eventDate}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-3"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-1"
           />
         </div>
 
@@ -189,7 +189,7 @@ const Page = () => {
             name="startTime"
             value={inputValues.startTime}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-3"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-1"
           />
         </div>
         <div className="space-y-1.5">
@@ -201,7 +201,7 @@ const Page = () => {
             name="endTime"
             value={inputValues.endTime}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-3"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-1"
           />
         </div>
 

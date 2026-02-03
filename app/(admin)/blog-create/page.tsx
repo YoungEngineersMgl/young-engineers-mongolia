@@ -302,7 +302,7 @@ const Page = () => {
             name="publishedDate"
             value={inputValues.publishedDate}
             onChange={handleInputs}
-            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-3"
+            className="h-11 rounded-xl border-gray-300 focus:ring-2 focus:ring-blue-200 mt-2 mb-2 bg-white px-1"
           />
 
           <div className="text-lg font-medium text-gray-700 mt-3">
